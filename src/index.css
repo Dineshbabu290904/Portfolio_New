@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary-gradient: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);
+  --color-primary: #1A2980;
+  --color-primary-50: rgba(26, 41, 128, 0.5);
+  --color-secondary-gradient: linear-gradient(135deg, #26D0CE 0%, #64F38C 100%);
+  --color-secondary: #26D0CE;
+  --color-secondary-50: rgba(38, 208, 206, 0.5);
+  --color-accent-gradient: linear-gradient(135deg, #FF512F 0%, #F09819 100%);
+  --color-accent: #FF512F;
+  --color-accent-50: rgba(255, 81, 47, 0.5);
+}
+
+.dark {
+  --color-primary-gradient: linear-gradient(135deg, #26D0CE 0%, #1A2980 100%);
+  --color-primary: #26D0CE;
+  --color-primary-50: rgba(38, 208, 206, 0.5);
+  --color-secondary-gradient: linear-gradient(135deg, #64F38C 0%, #26D0CE 100%);
+  --color-secondary: #64F38C;
+  --color-secondary-50: rgba(100, 243, 140, 0.5);
+  --color-accent-gradient: linear-gradient(135deg, #F09819 0%, #FF512F 100%);
+  --color-accent: #F09819;
+  --color-accent-50: rgba(240, 152, 25, 0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-200 dark:bg-gray-800;
+}
+
+/* Define scrollbar thumb classes */
+@layer components {
+  .scrollbar-thumb {
+    @apply bg-primary-50 rounded-full;
+  }
+  
+  .scrollbar-thumb-hover {
+    @apply bg-primary;
+  }
+}
+
+/* Apply the custom classes */
+::-webkit-scrollbar-thumb {
+  @apply scrollbar-thumb;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply scrollbar-thumb-hover;
+}
