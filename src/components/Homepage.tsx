@@ -11,11 +11,6 @@ function Homepage() {
   return (
     <>
       <Hero id="hero" />
-      <About id="about" />
-      <Skills id="skills" />
-      <Experience id="experience" />
-      <Projects id="projects" />
-      <Contact id="contact" />
     </>
   );
 }
