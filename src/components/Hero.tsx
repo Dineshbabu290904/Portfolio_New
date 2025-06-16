@@ -104,7 +104,7 @@ export default function Hero() {
               className="h-10 mb-6"
             >
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 flex items-center justify-center md:justify-start">
-                I'm am{" "}
+                I'm am a {" "}
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={activeTypingIndex}
