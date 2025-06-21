@@ -304,7 +304,7 @@ export default function Contact() {
               </motion.div>
 
               {/* Working Hours */}
-              <motion.div variants={infoVariants}>
+{/*               <motion.div variants={infoVariants}>
                 <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Working Hours</h3>
                 <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
@@ -320,7 +320,7 @@ export default function Contact() {
                     <span className="text-primary font-medium">Closed</span>
                   </div>
                 </div>
-              </motion.div>
+              </motion.div> */}
               
               {/* Social Links */}
               <motion.div variants={infoVariants}>
