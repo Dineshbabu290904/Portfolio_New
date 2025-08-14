@@ -149,10 +149,16 @@ export default function Hero() {
               <motion.a
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(var(--color-primary-rgb), 0.4)" }}
                 whileTap={{ scale: 0.95 }}
-                href="#projects"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
               >
-                View Projects <ArrowRight className="ml-2 w-5 h-5"/>
+                <Link to={`/projects/${project.id}`} className="block">
+                  <motion.img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-56 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  View Projects <ArrowRight className="ml-2 w-5 h-5"/>
+                  </Link>
               </motion.a>
 
               {/* Secondary CTA - Resume Download */}
