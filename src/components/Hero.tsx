@@ -105,7 +105,7 @@ export default function Hero() {
               className="h-10 mb-6"
             >
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 flex items-center justify-center md:justify-start">
-                I'm am a {" "}
+                I'm a {" "}
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={activeTypingIndex}
@@ -147,21 +147,23 @@ export default function Hero() {
               className="flex flex-wrap justify-center md:justify-start gap-4 mb-8"
             >
               {/* Primary CTA - View Projects */} 
-
-              <motion.Link to={`/projects/`} 
+              <motion.div
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(var(--color-primary-rgb), 0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
               >
-                View Projects <ArrowRight className="ml-2 w-5 h-5"/>
-              </motion.Link>
-              
+                <Link to={`/projects/`} className="flex items-center">
+                  View Projects <ArrowRight className="ml-2 w-5 h-5"/>
+                </Link>
+              </motion.div>
 
               {/* Secondary CTA - Resume Download */}
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 href="https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 border-2 border-primary text-base font-medium rounded-full shadow-md text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
               >
                 Resume <Download className="ml-2 w-5 h-5"/>
@@ -322,7 +324,6 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
-
       {/* Enhanced animations and style definitions */}
       <style>{`
         @keyframes gradient-shift {
