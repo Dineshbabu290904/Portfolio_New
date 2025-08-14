@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Zap, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
