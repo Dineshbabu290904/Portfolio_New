@@ -152,12 +152,7 @@ export default function Hero() {
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
               >
-                <Link to={`/projects/${project.id}`} className="block">
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-56 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
+                <Link to={`/projects/`} className="block">
                   View Projects <ArrowRight className="ml-2 w-5 h-5"/>
                   </Link>
               </motion.a>
