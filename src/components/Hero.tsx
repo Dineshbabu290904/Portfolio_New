@@ -147,15 +147,15 @@ export default function Hero() {
               className="flex flex-wrap justify-center md:justify-start gap-4 mb-8"
             >
               {/* Primary CTA - View Projects */} 
-              <motion.a
+
+              <motion.Link to={`/projects/`} 
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(var(--color-primary-rgb), 0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
               >
-                <Link to={`/projects/`} className="block">
-                  View Projects <ArrowRight className="ml-2 w-5 h-5"/>
-                  </Link>
-              </motion.a>
+                View Projects <ArrowRight className="ml-2 w-5 h-5"/>
+              </motion.Link>
+              
 
               {/* Secondary CTA - Resume Download */}
               <motion.a
