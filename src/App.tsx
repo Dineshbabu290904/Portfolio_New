@@ -4,6 +4,7 @@ import Navigation from './components/Navigation';
 import OnePage from './components/OnePage';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
+import CommandPalette from './components/CommandPalette';
 import { FilmGrain, IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
 import { Aurora, Cursor } from './components/motion/Atmosphere';
 import { ProjectDetailSkeleton, TerminalSkeleton, GenericPageSkeleton } from './components/ui/Skeleton';
@@ -40,6 +41,7 @@ function App() {
       <Aurora />
       <Cursor />
       <Navigation />
+      <CommandPalette />
 
       <main id="main-content" className="overflow-x-clip">
         {/* One scrolling page; each section also has its own URL (/about, /skills, ...).
