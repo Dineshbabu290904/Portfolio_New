@@ -128,3 +128,86 @@ code, kbd, samp, pre {
 ::-webkit-scrollbar-thumb:hover {
   @apply scrollbar-thumb-hover;
 }
+/* Cinematic film grain: an SVG noise tile, nudged in steps so it shimmers like film stock */
+.film-grain {
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  animation: grain-shift 0.9s steps(6) infinite;
+}
+
+.dark .film-grain {
+  opacity: 0.08;
+  mix-blend-mode: screen;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- Immersive atmosphere ---------- */
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.32;
+  will-change: transform;
+}
+.aurora-a {
+  width: 46vw; height: 46vw; left: 8%; top: 4%;
+  background: radial-gradient(circle, rgb(var(--c-primary)) 0%, transparent 70%);
+  animation: aurora-drift-a 28s ease-in-out infinite alternate;
+}
+.aurora-b {
+  width: 40vw; height: 40vw; right: 6%; top: 30%;
+  background: radial-gradient(circle, rgb(var(--c-secondary)) 0%, transparent 70%);
+  animation: aurora-drift-b 34s ease-in-out infinite alternate;
+}
+.aurora-c {
+  width: 34vw; height: 34vw; left: 30%; top: 62%;
+  background: radial-gradient(circle, rgb(var(--c-accent)) 0%, transparent 70%);
+  opacity: 0.16;
+  animation: aurora-drift-c 40s ease-in-out infinite alternate;
+}
+.dark .aurora-blob { opacity: 0.22; }
+.dark .aurora-c { opacity: 0.1; }
+
+@keyframes aurora-drift-a { to { transform: translate(18vw, 12vh) scale(1.15); } }
+@keyframes aurora-drift-b { to { transform: translate(-16vw, -10vh) scale(0.9); } }
+@keyframes aurora-drift-c { to { transform: translate(12vw, -18vh) scale(1.2); } }
+
+.dot-grid {
+  background-image: radial-gradient(rgb(var(--c-primary) / 0.16) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
+}
+.dark .dot-grid { background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px); }
+
+/* Outlined display type used for chapter numbers and big marquee words */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(var(--c-primary) / 0.35);
+}
+.dark .text-outline { -webkit-text-stroke-color: rgb(255 255 255 / 0.18); }
+
+/* Hide the system cursor only where the custom cursor is active (mouse devices) */
+@media (hover: hover) and (pointer: fine) {
+  .has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+  .has-custom-cursor input, .has-custom-cursor textarea { cursor: text !important; }
+}
+
+/* Terminal: faint CRT scanlines and a soft vignette over the console screen */
+.terminal-screen {
+  background-image:
+    repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.025) 0px, rgb(255 255 255 / 0.025) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.35) 100%);
+  text-shadow: 0 0 6px rgb(var(--c-secondary) / 0.15);
+}
+.terminal-screen::-webkit-scrollbar { width: 6px; }
+.terminal-screen::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); border-radius: 9999px; }

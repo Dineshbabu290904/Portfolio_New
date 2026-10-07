@@ -6,10 +6,14 @@ import {
   Send, 
   Phone, 
   MapPin, 
-  Loader2
+  Loader2,
+  FileText
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { Magnetic } from './motion/Atmosphere';
+import { ChapterNumber } from './motion/Scroll';
+import { SplitText } from './motion/Reveal';
 
 // Replace with your own EmailJS credentials
 // EmailJS config: override via VITE_EMAILJS_* env vars, falling back to the current account.
@@ -36,11 +40,6 @@ export default function Contact() {
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   const formVariants = {
@@ -114,30 +113,47 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-gray-100 to-white dark:from-gray-800 dark:to-gray-900 transition-colors">
-      <div className="container mx-auto px-4">
+    <section id="contact" aria-labelledby="contact-title" className="scroll-mt-24 py-16 md:py-24">
+      <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.1 }}
           variants={containerVariants}
-          className="max-w-5xl mx-auto"
         >
           
-          {/* Page Header */}
-          <motion.div variants={titleVariants} className="mb-12">
-            
-            <motion.h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 text-center">
-              Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Touch</span>
-            </motion.h2>
-            <div className="h-1 w-20 bg-primary rounded mx-auto mb-6"></div>
-            <p className="text-gray-600 dark:text-gray-300 text-center mb-8 leading-relaxed">
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+          <header className="relative mb-12 md:mb-16">
+            <ChapterNumber value="05" className="absolute right-0 -top-10 md:-top-16" />
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-4 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-primary to-secondary" />
+              Contact
             </p>
-          </motion.div>
+            <SplitText
+              id="contact-title"
+              className="font-display text-6xl sm:text-8xl lg:text-9xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[0.95]"
+              segments={[
+                { text: "Let's" },
+                { text: 'talk.', className: 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary' },
+              ]}
+            />
+            <p className="mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
+              Open to conversations about engineering, collaborations and interesting problems. Send a message or reach me directly.
+            </p>
+            <Magnetic className="mt-8" strength={0.25}>
+              <a
+                href="mailto:dineshbabus309@gmail.com"
+                data-cursor="Write"
+                className="group relative inline-block font-display text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white"
+              >
+                dineshbabus309@gmail.com
+                <span aria-hidden="true" className="absolute left-0 -bottom-1 h-[3px] w-full origin-left scale-x-0 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100" />
+                <span aria-hidden="true" className="absolute left-0 -bottom-1 h-px w-full bg-gray-300 dark:bg-gray-700 -z-10" />
+              </a>
+            </Magnetic>
+          </header>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+          <div className="grid md:grid-cols-2 gap-12 rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm p-6 sm:p-8 md:p-12">
             
             {/* Contact Form */}
             <motion.div variants={formVariants}>
@@ -295,7 +311,7 @@ export default function Contact() {
                     <div>
                       <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300">Location</h4>
                       <p className="text-gray-600 dark:text-gray-400">
-                        Vijayawada, Andhra Pradesh, India
+                        Hyderabad, Telangana, India
                       </p>
                     </div>
                   </div>
@@ -324,7 +340,7 @@ export default function Contact() {
               {/* Social Links */}
               <motion.div variants={infoVariants}>
                 <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Connect</h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   {/* GitHub */}
                   <motion.a
                     whileHover={{ scale: 1.1 }}
@@ -362,6 +378,14 @@ export default function Contact() {
                   >
                     <Mail className="w-5 h-5" />
                   </motion.a>
+                  <a
+                    href="https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-primary/40 text-primary dark:text-primary-light text-sm font-semibold hover:bg-primary/10 transition-colors"
+                  >
+                    <FileText className="w-4 h-4" /> Resume
+                  </a>
                 </div>
               </motion.div>
             </motion.div>

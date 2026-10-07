@@ -17,7 +17,6 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom', 'react-router-dom'],
           motion: ['framer-motion'],
-          particles: ['react-particles', 'tsparticles', 'tsparticles-engine'],
         },
       },
     },

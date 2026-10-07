@@ -1,23 +1,18 @@
 import { lazy, Suspense, type ReactNode } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import Homepage from './components/Homepage';
-import ParticlesBackground from './components/ParticlesBackground';
+import OnePage from './components/OnePage';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
-import {
-  ProfileSkeleton, SkillsPageSkeleton, TimelineSkeleton, ProjectsPageSkeleton,
-  ProjectDetailSkeleton, ContactSkeleton, TerminalSkeleton, GenericPageSkeleton,
-} from './components/ui/Skeleton';
+import CommandPalette from './components/CommandPalette';
+import { FilmGrain, IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
+import { Aurora, Cursor } from './components/motion/Atmosphere';
+import { ProjectDetailSkeleton, TerminalSkeleton, GenericPageSkeleton } from './components/ui/Skeleton';
+import { isSectionPath } from './data/portfolio';
 import './index.css';
 
-// Secondary pages are code-split so the home page loads faster.
-const EnhancedAboutPage = lazy(() => import('./components/About'));
-const Skills = lazy(() => import('./components/Skills'));
-const Experience = lazy(() => import('./components/Experience'));
-const Projects = lazy(() => import('./components/Projects'));
+// Separate pages are code-split so the main page loads faster.
 const SingleProject = lazy(() => import('./components/SingleProject'));
-const Contact = lazy(() => import('./components/Contact'));
 const TerminalPage = lazy(() => import('./components/TerminalPage'));
 const NotFound = lazy(() => import('./components/NotFound'));
 
@@ -39,22 +34,27 @@ function App() {
         Skip to content
       </a>
       <ScrollToTop />
-      {/* ParticlesBackground and Navigation always visible */}
-      <ParticlesBackground />
+      {pathname === '/' && <IntroCurtain />}
+      <ScrollProgress />
+      <FilmGrain />
+      {/* Ambient backdrop and custom cursor; navigation always visible */}
+      <Aurora />
+      <Cursor />
       <Navigation />
+      <CommandPalette />
 
-      <main id="main-content">
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/about" element={withSkeleton(<EnhancedAboutPage />, <ProfileSkeleton />)} />
-          <Route path="/skills" element={withSkeleton(<Skills />, <SkillsPageSkeleton />)} />
-          <Route path="/experience" element={withSkeleton(<Experience />, <TimelineSkeleton />)} />
-          <Route path="/projects" element={withSkeleton(<Projects />, <ProjectsPageSkeleton />)} />
-          <Route path="/projects/:projectId" element={withSkeleton(<SingleProject />, <ProjectDetailSkeleton />)} />
-          <Route path="/contact" element={withSkeleton(<Contact />, <ContactSkeleton />)} />
-          <Route path="/terminal" element={withSkeleton(<TerminalPage />, <TerminalSkeleton />)} />
-          <Route path="*" element={withSkeleton(<NotFound />, <GenericPageSkeleton />)} />
-        </Routes>
+      <main id="main-content" className="overflow-x-clip">
+        {/* One scrolling page; each section also has its own URL (/about, /skills, ...).
+            Rendered outside <Routes> so moving between sections never remounts it. */}
+        {isSectionPath(pathname) ? (
+          <OnePage />
+        ) : (
+          <Routes>
+            <Route path="/projects/:projectId" element={withSkeleton(<SingleProject />, <ProjectDetailSkeleton />)} />
+            <Route path="/terminal" element={withSkeleton(<TerminalPage />, <TerminalSkeleton />)} />
+            <Route path="*" element={withSkeleton(<NotFound />, <GenericPageSkeleton />)} />
+          </Routes>
+        )}
       </main>
       {showFooter && <Footer />}
     </div>
