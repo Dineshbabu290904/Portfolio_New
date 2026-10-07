@@ -208,7 +208,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
 
   const commandGroups = useMemo(() => ({
     "Navigation": ["about", "projects", "skills", "experience", "contact", "social"],
-    "System": ["help", "clear", "history", "theme", "system-info", "exit"],
+    "System": ["whoami", "help", "clear", "history", "theme", "system-info", "exit"],
     "Tools": ["echo", "date", "time", "weather"],
     "Links": ["github", "linkedin", "resume"],
     "Fun": ["ascii-art", "joke", "fortune", "game", "coffee"]
@@ -224,6 +224,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
       case 'help': return <HelpCircle {...iconProps} />;
       case 'clear': return <Zap {...iconProps} />;
       case 'echo': return <MessageSquare {...iconProps} />;
+      case 'whoami': return <User {...iconProps} />;
       case 'about': return <Info {...iconProps} />;
       case 'exit': return <LinkExternal {...iconProps} />;
       case 'projects': return <Package {...iconProps} />;
@@ -347,6 +348,16 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
       case 'clear':
         clearOutput();
         return;
+      case 'whoami':
+        response.type = 'component';
+        response.content = (
+          <div className="space-y-0.5">
+            <p className={`font-semibold ${currentThemeConfig.primary}`}>Dinesh Babu Surapaneni</p>
+            <p>Associate Software Developer @ <span className={currentThemeConfig.accentColor}>DAZN</span></p>
+            <p className={currentThemeConfig.secondaryText}>Full-stack development · Data science · Machine learning</p>
+          </div>
+        );
+        break;
       case 'echo':
         response.type = 'text';
         response.content = args.length > 0 ? args.join(' ') : <span className={currentThemeConfig.secondaryText}>Usage: echo [text]</span>;

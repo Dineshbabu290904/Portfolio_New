@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Code, Database, Brain, User, Users, Sparkles, Terminal, FileCode, Server, Layers,
   GitBranch, BookOpen, Workflow, Cpu, PieChart, Network, MessageSquare,
@@ -19,6 +19,7 @@ interface Skill {
 
 type SkillCategory = 'programmingLanguages' | 'frameworksTools' | 'databases' | 'specializations' | 'softSkills';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageHeader from './ui/PageHeader';
 
 // Using the data provided in your paste.txt file
 const skillsData: Record<SkillCategory, Skill[]> = {
@@ -308,23 +309,6 @@ export default function SkillsPage() {
   const categories = Object.keys(skillsData) as SkillCategory[];
   const currentSkills = skillsData[activeCategory] || [];
 
-  useEffect(() => {
-    const primaryColorValue = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
-    if (primaryColorValue) {
-      let r=59, g=130, b=246; 
-      if (primaryColorValue.startsWith('#')) {
-        r = parseInt(primaryColorValue.slice(1, 3), 16);
-        g = parseInt(primaryColorValue.slice(3, 5), 16);
-        b = parseInt(primaryColorValue.slice(5, 7), 16);
-      } else if (primaryColorValue.startsWith('rgb')) {
-        const parts = primaryColorValue.match(/(\d+),\s*(\d+),\s*(\d+)/);
-        if (parts) { r = parseInt(parts[1]); g = parseInt(parts[2]); b = parseInt(parts[3]); }
-      }
-      document.documentElement.style.setProperty('--color-primary-rgb', `${r}, ${g}, ${b}`);
-    } else {
-      document.documentElement.style.setProperty('--color-primary-rgb', `59, 130, 246`);
-    }
-  }, []);
   
   const handleSkillClick = useCallback((skill: Skill) => {
     setSelectedSkill(skill);
@@ -343,21 +327,13 @@ export default function SkillsPage() {
       <BGShapes /> 
       
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <span className="inline-block px-4 py-1.5 mb-3 text-sm font-semibold rounded-full bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light shadow-sm">
-            <Zap className="inline-block w-4 h-4 mr-1.5 align-text-bottom" />
-            My Technical Arsenal
-          </span>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-white leading-tight">
-            Skills & <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Proficiencies</span>
-          </h2>
-          <div className="mt-4 mx-auto w-28 h-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-full"></div>
-        </motion.div>
+        <PageHeader
+          eyebrow="My Technical Arsenal"
+          eyebrowIcon={<Zap className="w-3.5 h-3.5" />}
+          title="Skills &"
+          highlight="Proficiencies"
+          subtitle="The languages, frameworks and tools I use day to day, from production web apps to machine learning."
+        />
       
         {/* New vertical layout with sidebar categories and main content */}
         <div className="flex flex-col lg:flex-row gap-8">

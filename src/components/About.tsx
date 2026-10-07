@@ -12,12 +12,12 @@ import { Link as RouterLink } from 'react-router-dom';
 // Personal data (remains the same as your last provided version)
 const personalInfo = {
   name: "Dinesh Babu Surapaneni",
-  title: "Data Scientist & Full Stack Developer",
+  title: "Associate Software Developer at DAZN",
   location: "Vijayawada, AP, India",
-  availability: "Open to Opportunities",
-  currentFocus: "Data Science & Web Development",
-  profileImage: "https://lh3.googleusercontent.com/pw/AP1GczO3WuHBOLUHiiEIeBy3lZSLLsKBko7p4RBTDQYt1v2Pt8urfHdKXvX6VqSjLGiwggtIW4t18WaIPyH3p4Y5WOahWbJeCA9nk0rZSNevSH3krUvGy-ur4qmuxU5zrlQW2jNiLTUXMMNY_t_EJbr5TPxO=w1544-h1469-s-no-gm?authuser=0?w=600&h=600&fit=crop&crop=faces",
-  bio: "A Data Science student from Vijayawada, passionate about AI/ML and Full Stack Development. I transform data into insights and build intelligent applications, driven by curiosity and a love for lifelong learning.",
+  availability: "Currently at DAZN",
+  currentFocus: "Software Development at DAZN",
+  profileImage: `${import.meta.env.BASE_URL}asserts/about.jpg`, // served from public/asserts
+  bio: "An Associate Software Developer at DAZN, the global sports streaming platform, with a background in Data Science from Vijayawada. I build reliable software, enjoy turning data into insights, and stay driven by curiosity and a love for lifelong learning.",
   resumeUrl: "https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
 };
 
@@ -199,7 +199,7 @@ export default function RedesignedAboutPage() {
       </div>
 
       {/* Sticky Header with semi-transparent background */}
-      <header className="relative z-20 top-2 pt-16 pb-6 px-4 bg-white/30 dark:bg-gray-800/30 sticky top-0 shadow-sm border-b border-gray-200/30 dark:border-gray-700/30">
+      <header className="relative z-20 pt-28 pb-6 px-4 bg-white/30 dark:bg-gray-800/30 shadow-sm border-b border-gray-200/30 dark:border-gray-700/30">
         <div className="container mx-auto">
           <motion.div 
             initial="hidden"
@@ -270,7 +270,7 @@ export default function RedesignedAboutPage() {
                             <img 
                               src={personalInfo.profileImage} 
                               alt={personalInfo.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover object-[50%_20%]"
                             />
                           </motion.div>
                         </div>

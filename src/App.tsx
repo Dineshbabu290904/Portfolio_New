@@ -1,10 +1,14 @@
-import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { lazy, Suspense, type ReactNode } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Homepage from './components/Homepage';
 import ParticlesBackground from './components/ParticlesBackground';
 import ScrollToTop from './components/ScrollToTop';
-import PageLoader from './components/PageLoader';
+import Footer from './components/Footer';
+import {
+  ProfileSkeleton, SkillsPageSkeleton, TimelineSkeleton, ProjectsPageSkeleton,
+  ProjectDetailSkeleton, ContactSkeleton, TerminalSkeleton, GenericPageSkeleton,
+} from './components/ui/Skeleton';
 import './index.css';
 
 // Secondary pages are code-split so the home page loads faster.
@@ -17,7 +21,15 @@ const Contact = lazy(() => import('./components/Contact'));
 const TerminalPage = lazy(() => import('./components/TerminalPage'));
 const NotFound = lazy(() => import('./components/NotFound'));
 
+// Each lazy page gets a skeleton shaped like its own layout while its code loads.
+const withSkeleton = (page: ReactNode, skeleton: ReactNode) => (
+  <Suspense fallback={skeleton}>{page}</Suspense>
+);
+
 function App() {
+  const { pathname } = useLocation();
+  const showFooter = pathname !== '/terminal';
+
   return (
     <div className="relative">
       <a
@@ -32,20 +44,19 @@ function App() {
       <Navigation />
 
       <main id="main-content">
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/about" element={<EnhancedAboutPage />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/experience" element={<Experience />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:projectId" element={<SingleProject />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/terminal" element={<TerminalPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/about" element={withSkeleton(<EnhancedAboutPage />, <ProfileSkeleton />)} />
+          <Route path="/skills" element={withSkeleton(<Skills />, <SkillsPageSkeleton />)} />
+          <Route path="/experience" element={withSkeleton(<Experience />, <TimelineSkeleton />)} />
+          <Route path="/projects" element={withSkeleton(<Projects />, <ProjectsPageSkeleton />)} />
+          <Route path="/projects/:projectId" element={withSkeleton(<SingleProject />, <ProjectDetailSkeleton />)} />
+          <Route path="/contact" element={withSkeleton(<Contact />, <ContactSkeleton />)} />
+          <Route path="/terminal" element={withSkeleton(<TerminalPage />, <TerminalSkeleton />)} />
+          <Route path="*" element={withSkeleton(<NotFound />, <GenericPageSkeleton />)} />
+        </Routes>
       </main>
+      {showFooter && <Footer />}
     </div>
   );
 }
