@@ -11,6 +11,9 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { Magnetic } from './motion/Atmosphere';
+import { ChapterNumber } from './motion/Scroll';
+import { SplitText } from './motion/Reveal';
 
 // Replace with your own EmailJS credentials
 // EmailJS config: override via VITE_EMAILJS_* env vars, falling back to the current account.
@@ -37,11 +40,6 @@ export default function Contact() {
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   const formVariants = {
@@ -124,17 +122,35 @@ export default function Contact() {
           variants={containerVariants}
         >
           
-          <motion.header variants={titleVariants} className="mb-10 md:mb-14 max-w-2xl">
-            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3">
+          <header className="relative mb-12 md:mb-16">
+            <ChapterNumber value="05" className="absolute right-0 -top-10 md:-top-16" />
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-4 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-primary to-secondary" />
               Contact
             </p>
-            <h2 id="contact-title" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-[1.1]">
-              Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">talk</span>
-            </h2>
-            <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <SplitText
+              id="contact-title"
+              className="font-display text-6xl sm:text-8xl lg:text-9xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[0.95]"
+              segments={[
+                { text: "Let's" },
+                { text: 'talk.', className: 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary' },
+              ]}
+            />
+            <p className="mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
               Open to conversations about engineering, collaborations and interesting problems. Send a message or reach me directly.
             </p>
-          </motion.header>
+            <Magnetic className="mt-8" strength={0.25}>
+              <a
+                href="mailto:dineshbabus309@gmail.com"
+                data-cursor="Write"
+                className="group relative inline-block font-display text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white"
+              >
+                dineshbabus309@gmail.com
+                <span aria-hidden="true" className="absolute left-0 -bottom-1 h-[3px] w-full origin-left scale-x-0 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100" />
+                <span aria-hidden="true" className="absolute left-0 -bottom-1 h-px w-full bg-gray-300 dark:bg-gray-700 -z-10" />
+              </a>
+            </Magnetic>
+          </header>
 
           {/* Main Content Grid */}
           <div className="grid md:grid-cols-2 gap-12 rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm p-6 sm:p-8 md:p-12">

@@ -2,10 +2,10 @@ import { lazy, Suspense, type ReactNode } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import OnePage from './components/OnePage';
-import ParticlesBackground from './components/ParticlesBackground';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
 import { FilmGrain, IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
+import { Aurora, Cursor } from './components/motion/Atmosphere';
 import { ProjectDetailSkeleton, TerminalSkeleton, GenericPageSkeleton } from './components/ui/Skeleton';
 import { isSectionPath } from './data/portfolio';
 import './index.css';
@@ -36,8 +36,9 @@ function App() {
       {pathname === '/' && <IntroCurtain />}
       <ScrollProgress />
       <FilmGrain />
-      {/* ParticlesBackground and Navigation always visible */}
-      <ParticlesBackground />
+      {/* Ambient backdrop and custom cursor; navigation always visible */}
+      <Aurora />
+      <Cursor />
       <Navigation />
 
       <main id="main-content" className="overflow-x-clip">

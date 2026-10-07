@@ -128,3 +128,21 @@ export function SectionStage({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+// Oversized outlined chapter number that drifts against the scroll, like a film chapter card.
+export function ChapterNumber({ value, className = '' }: { value: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [80, -80]);
+  return (
+    <motion.span
+      ref={ref}
+      aria-hidden="true"
+      style={reduced ? undefined : { y }}
+      className={`pointer-events-none select-none font-display font-extrabold leading-none text-outline text-[7rem] sm:text-[10rem] lg:text-[13rem] tracking-tighter ${className}`}
+    >
+      {value}
+    </motion.span>
+  );
+}

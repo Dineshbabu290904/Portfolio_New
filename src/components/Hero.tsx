@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef, type MouseEvent } from 'react';
 import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { SplitText } from './motion/Reveal';
+import { Magnetic } from './motion/Atmosphere';
 import { INTRO_HOLD, shouldPlayIntro } from '../lib/intro';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Briefcase, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -184,7 +185,8 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.9 }}
               className="flex flex-wrap justify-center md:justify-start gap-4 mb-8"
             >
-              {/* Primary CTA - View Projects */} 
+              {/* Primary CTA - View Projects (magnetic) */}
+              <Magnetic>
               <motion.div
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(var(--color-primary-rgb), 0.4)" }}
                 whileTap={{ scale: 0.95 }}
@@ -194,6 +196,7 @@ export default function Hero() {
                   View Projects <ArrowRight className="ml-2 w-5 h-5"/>
                 </Link>
               </motion.div>
+              </Magnetic>
 
               {/* Secondary CTA - Resume Download */}
               <motion.a

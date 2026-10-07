@@ -7,6 +7,7 @@ import { faKaggle } from '@fortawesome/free-brands-svg-icons';
 import Section, { Chip, SectionHeader, bandClass, card } from './Section';
 import SkeletonImage from '../ui/SkeletonImage';
 import { RevealGroup, RevealItem } from '../motion/Reveal';
+import { ChapterNumber } from '../motion/Scroll';
 import { projects, type Project } from '../../data/portfolio';
 
 const linkClass =
@@ -23,7 +24,7 @@ const heading = {
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <>
-      <Link to={`/projects/${project.id}`} className="block relative" aria-label={`${project.title} details`}>
+      <Link to={`/projects/${project.id}`} data-cursor="View" className="block relative" aria-label={`${project.title} details`}>
         <SkeletonImage src={project.image} alt={project.title} className="w-full h-48" />
         <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/55 text-white backdrop-blur-sm">
           {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
@@ -81,7 +82,7 @@ const cardClass = `${card} overflow-hidden flex flex-col group transition-[box-s
 // Phones, tablets and reduced motion: a regular grid.
 function ProjectsGrid() {
   return (
-    <Section {...heading} band>
+    <Section {...heading} chapter="04" band>
       <RevealGroup className="grid gap-6 md:grid-cols-2" stagger={0.12}>
         {projects.map((project, i) => (
           <RevealItem as="article" key={project.id} lift={6} className={cardClass}>
@@ -129,7 +130,8 @@ function ProjectsFilmStrip() {
       className={`relative ${bandClass}`}
     >
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center pt-20">
-        <div className="container mx-auto px-4 max-w-6xl flex items-end justify-between gap-8">
+        <div className="relative container mx-auto px-4 max-w-6xl flex items-end justify-between gap-8">
+          <ChapterNumber value="04" className="absolute right-4 -top-24" />
           <SectionHeader {...heading} className="mb-8" />
           <div className="hidden lg:flex flex-col items-end gap-2 mb-10 shrink-0">
             <span className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500">Scroll to explore</span>

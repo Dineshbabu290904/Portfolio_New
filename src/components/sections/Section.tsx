@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Reveal, SplitText } from '../motion/Reveal';
-import { SectionStage } from '../motion/Scroll';
+import { ChapterNumber, SectionStage } from '../motion/Scroll';
 
 interface SectionProps {
   id: string;
@@ -12,6 +12,8 @@ interface SectionProps {
   className?: string;
   /** Soft tinted band behind the section, used on alternating sections for rhythm. */
   band?: boolean;
+  /** Chapter number shown as a large outlined numeral, e.g. "01". */
+  chapter?: string;
 }
 
 export function SectionHeader({
@@ -23,7 +25,7 @@ export function SectionHeader({
   className = 'mb-10 md:mb-14',
 }: Pick<SectionProps, 'id' | 'eyebrow' | 'title' | 'highlight' | 'intro'> & { className?: string }) {
   return (
-    <header className={`max-w-2xl ${className}`}>
+    <header className={`relative max-w-2xl ${className}`}>
       <Reveal>
         <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3 flex items-center gap-3">
           <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-primary to-secondary" />
@@ -53,14 +55,15 @@ export const bandClass = 'bg-white/50 dark:bg-gray-800/25 border-y border-gray-2
 
 // Shared layout for every section on the one-page site: anchor target, heading block, content.
 // The content pushes in from a little depth as the section scrolls into view.
-export default function Section({ id, eyebrow, title, highlight, intro, children, className = '', band = false }: SectionProps) {
+export default function Section({ id, eyebrow, title, highlight, intro, children, className = '', band = false, chapter }: SectionProps) {
   return (
     <section
       id={id}
       aria-labelledby={`${id}-title`}
       className={`relative scroll-mt-24 py-16 md:py-24 ${band ? bandClass : ''} ${className}`}
     >
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="relative container mx-auto px-4 max-w-6xl">
+        {chapter && <ChapterNumber value={chapter} className="absolute right-4 -top-6 md:-top-12" />}
         <SectionHeader id={id} eyebrow={eyebrow} title={title} highlight={highlight} intro={intro} />
         <SectionStage>{children}</SectionStage>
       </div>
