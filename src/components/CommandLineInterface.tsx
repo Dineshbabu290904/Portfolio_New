@@ -381,7 +381,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           response = {
             type: 'link',
             content: <>{icon} Redirecting to {pageInfo.title}...</>,
-            meta: `/${command}`
+            meta: `${import.meta.env.BASE_URL}${command}`
           };
           openLink(response.meta!);
         } else {

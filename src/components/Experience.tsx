@@ -203,7 +203,7 @@ const ExperienceItem = ({ experience, isLast }: { /* Props type from previous ve
         )}
         
         <div className="p-5 md:p-6">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.72rem] md:text-xs tabular-nums text-gray-500 dark:text-gray-400 mb-3">
               <div className="flex items-center">
                 <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
                 <span>{experience.duration}</span>
@@ -317,7 +317,7 @@ const TimelineCard = ({ item, index }: { item: typeof timelineData[0], index: nu
                     <div className={`sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-full ${item.color} mr-3 text-white shadow-md`}>
                         {React.cloneElement(item.icon, { className: "w-4 h-4"})}
                     </div>
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full text-white ${item.color} shadow-sm`}>
+                    <span className={`font-mono text-xs font-semibold tabular-nums px-3 py-1 rounded-full text-white ${item.color} shadow-sm`}>
                         {item.year}
                     </span>
                 </div>

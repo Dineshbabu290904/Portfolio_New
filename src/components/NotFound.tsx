@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, Terminal } from 'lucide-react';
 
 export default function NotFound() {
+  const { pathname } = useLocation();
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-24 pb-16">
       <motion.div
@@ -12,7 +13,7 @@ export default function NotFound() {
         className="max-w-lg w-full text-center bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 md:p-10"
       >
         <p className="font-mono text-sm text-gray-500 dark:text-gray-400 mb-2">
-          $ cd {typeof window !== 'undefined' ? window.location.pathname : ''}
+          $ cd {pathname}
         </p>
         <p className="font-mono text-sm text-red-500 dark:text-red-400 mb-6">
           bash: no such file or directory

@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-gray-200/70 dark:border-gray-800 bg-white/70 dark:bg-gray-900/80 backdrop-blur-md">
       <div className="container mx-auto px-4 py-10 grid gap-8 md:grid-cols-3 md:items-start">
         <div className="space-y-2">
-          <Link to="/" className="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">
+          <Link to="/" className="font-display text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">
             Dinesh Babu <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Surapaneni</span>
           </Link>
           <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">

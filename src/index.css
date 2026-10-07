@@ -56,8 +56,39 @@ body {
   @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200 font-sans antialiased;
 }
 
-h1, h2, h3 {
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.6;
+  word-spacing: 0.02em;
+}
+
+/* Display face for headings; tighter tracking reads better at large sizes */
+h1, h2, h3, .font-display {
+  font-family: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
   text-wrap: balance;
+}
+
+h1 {
+  letter-spacing: -0.022em;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+code, kbd, samp, pre {
+  font-family: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
 ::selection {

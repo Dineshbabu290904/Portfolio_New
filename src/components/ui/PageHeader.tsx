@@ -35,7 +35,7 @@ export default function PageHeader({
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
     >
-      <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 mb-4 text-xs font-semibold uppercase tracking-[0.12em] rounded-full ${pill}`}>
+      <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 mb-4 font-mono text-[0.7rem] font-medium uppercase tracking-[0.16em] rounded-full ${pill}`}>
         {eyebrowIcon}
         {eyebrow}
       </span>
