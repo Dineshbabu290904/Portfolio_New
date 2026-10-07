@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Reveal, SplitText } from '../motion/Reveal';
 
 interface SectionProps {
   id: string;
@@ -22,19 +23,27 @@ export default function Section({ id, eyebrow, title, highlight, intro, children
     >
       <div className="container mx-auto px-4 max-w-6xl">
         <header className="mb-10 md:mb-14 max-w-2xl">
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3">
-            {eyebrow}
-          </p>
-          <h2 id={`${id}-title`} className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-[1.1]">
-            {title}
-            {highlight && (
-              <>
-                {' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">{highlight}</span>
-              </>
-            )}
-          </h2>
-          {intro && <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">{intro}</p>}
+          <Reveal>
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-primary to-secondary" />
+              {eyebrow}
+            </p>
+          </Reveal>
+          <SplitText
+            id={`${id}-title`}
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-[1.1]"
+            segments={[
+              { text: title },
+              ...(highlight
+                ? [{ text: highlight, className: 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary' }]
+                : []),
+            ]}
+          />
+          {intro && (
+            <Reveal delay={0.25}>
+              <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">{intro}</p>
+            </Reveal>
+          )}
         </header>
         {children}
       </div>

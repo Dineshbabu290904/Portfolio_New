@@ -1,4 +1,5 @@
 import Section, { card } from './Section';
+import { RevealGroup, RevealItem } from '../motion/Reveal';
 import { skillGroups } from '../../data/portfolio';
 
 export default function SkillsSection() {
@@ -10,15 +11,15 @@ export default function SkillsSection() {
       highlight="work with"
       intro="Grouped by area. A filled dot marks the tools I'm most fluent in."
     >
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {skillGroups.map((group) => (
-          <div key={group.title} className={`${card} p-6`}>
+          <RevealItem key={group.title} lift={4} className={`${card} p-6 transition-shadow duration-500 hover:shadow-xl`}>
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{group.title}</h3>
             <ul className="flex flex-wrap gap-2">
               {group.skills.map((skill) => (
                 <li
                   key={skill.name}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200/80 dark:border-gray-600/60 bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-800 dark:text-gray-100"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200/80 dark:border-gray-600/60 bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-800 dark:text-gray-100 transition-colors duration-300 hover:border-primary/40 hover:bg-primary/5 dark:hover:bg-primary/10"
                 >
                   {skill.level && (
                     <span
@@ -35,9 +36,9 @@ export default function SkillsSection() {
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </Section>
   );
 }

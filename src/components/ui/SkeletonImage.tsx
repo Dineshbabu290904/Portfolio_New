@@ -28,7 +28,7 @@ export default function SkeletonImage({ src, alt, className = '' }: SkeletonImag
           decoding="async"
           onLoad={() => setStatus('loaded')}
           onError={() => setStatus('error')}
-          className={`w-full h-full object-cover transition-[opacity,transform] duration-500 ease-out group-hover:scale-105 ${status === 'loaded' ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.06] ${status === 'loaded' ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
     </div>

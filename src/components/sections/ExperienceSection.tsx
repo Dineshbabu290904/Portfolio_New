@@ -1,8 +1,16 @@
+import { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { Award, MapPin } from 'lucide-react';
+import { RevealItem } from '../motion/Reveal';
 import Section, { Chip, card } from './Section';
 import { experiences } from '../../data/portfolio';
 
 export default function ExperienceSection() {
+  // The timeline line draws itself as the reader scrolls through the roles.
+  const listRef = useRef<HTMLOListElement>(null);
+  const { scrollYProgress } = useScroll({ target: listRef, offset: ['start 75%', 'end 60%'] });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 25, mass: 0.4 });
+
   return (
     <Section
       id="experience"
@@ -12,18 +20,27 @@ export default function ExperienceSection() {
       highlight="worked"
       intro="From mentoring and internships to shipping production features at DAZN India."
     >
-      <ol className="relative border-l-2 border-gray-200 dark:border-gray-700 ml-2 md:ml-3 space-y-10">
+      <ol ref={listRef} className="relative ml-2 md:ml-3 space-y-10">
+        {/* Track and the animated line drawn over it */}
+        <span aria-hidden="true" className="absolute left-0 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
+        <motion.span
+          aria-hidden="true"
+          style={{ scaleY: lineScale }}
+          className="absolute left-0 top-0 bottom-0 w-0.5 -translate-x-1/2 origin-top bg-gradient-to-b from-secondary via-primary to-accent"
+        />
         {experiences.map((job) => (
-          <li key={`${job.company}-${job.role}`} className="relative pl-6 md:pl-10">
+          <RevealItem as="li" key={`${job.company}-${job.role}`} className="relative pl-6 md:pl-10">
             {/* Timeline marker */}
-            <span
-              aria-hidden="true"
-              className={`absolute -left-[9px] top-2 w-4 h-4 rounded-full border-4 border-gray-50 dark:border-gray-900 ${
-                job.current ? 'bg-emerald-500' : 'bg-primary dark:bg-primary-light'
-              }`}
-            />
+            <span aria-hidden="true" className="absolute left-0 top-2 -translate-x-1/2 flex w-4 h-4">
+              {job.current && <span className="absolute inset-0 rounded-full bg-emerald-500/60 animate-ping" />}
+              <span
+                className={`relative w-4 h-4 rounded-full border-4 border-gray-50 dark:border-gray-900 ${
+                  job.current ? 'bg-emerald-500' : 'bg-primary dark:bg-primary-light'
+                }`}
+              />
+            </span>
 
-            <article className={`${card} p-6 md:p-7`}>
+            <article className={`${card} p-6 md:p-7 transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1 hover:shadow-xl hover:border-primary/30`}>
               <header className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-6">
                 <div className="min-w-0">
                   <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{job.role}</h3>
@@ -76,7 +93,7 @@ export default function ExperienceSection() {
                 </div>
               )}
             </article>
-          </li>
+          </RevealItem>
         ))}
       </ol>
     </Section>

@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo, useRef, type MouseEvent } from 'react';
+import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import { SplitText } from './motion/Reveal';
+import { INTRO_HOLD, shouldPlayIntro } from '../lib/intro';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Briefcase, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -8,17 +10,42 @@ const roles = ["Software Engineer at DAZN", "Full-Stack Developer", "Data Scient
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTypingIndex, setActiveTypingIndex] = useState(0);
+  // When the opening title sequence plays, hold the hero entrance until the curtain parts.
+  const [hold] = useState(() => (shouldPlayIntro(false) ? INTRO_HOLD : 0));
+
+  // Cursor spotlight: a soft light that follows the pointer across the hero.
+  const sectionRef = useRef<HTMLElement>(null);
+  const spotX = useMotionValue(-1000);
+  const spotY = useMotionValue(-1000);
+  const spotlight = useMotionTemplate`radial-gradient(520px circle at ${spotX}px ${spotY}px, rgb(var(--c-secondary) / 0.16), transparent 70%)`;
+  const handlePointer = (e: MouseEvent<HTMLElement>) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    spotX.set(e.clientX - rect.left);
+    spotY.set(e.clientY - rect.top);
+  };
+
+  // Parallax: as the page scrolls away, the portrait drifts and the copy lifts and fades like a camera pull-back.
+  const { scrollY } = useScroll();
+  const smoothY = useSpring(scrollY, { stiffness: 120, damping: 30, mass: 0.4 });
+  const portraitY = useTransform(smoothY, [0, 700], [0, 120]);
+  const portraitScale = useTransform(smoothY, [0, 700], [1, 0.92]);
+  const copyY = useTransform(smoothY, [0, 700], [0, -60]);
+  const copyOpacity = useTransform(smoothY, [0, 500], [1, 0.2]);
 
   useEffect(() => {
-    setIsVisible(true);
+    const reveal = setTimeout(() => setIsVisible(true), hold * 1000);
     
     // Set up typing animation interval
     const typingInterval = setInterval(() => {
       setActiveTypingIndex((prev) => (prev + 1) % roles.length);
     }, 3000);
     
-    return () => clearInterval(typingInterval);
-  }, []);
+    return () => {
+      clearTimeout(reveal);
+      clearInterval(typingInterval);
+    };
+  }, [hold]);
 
   // Particles for background effect
   // Memoized so particles don't jump to new positions every time the role text rotates
@@ -31,7 +58,14 @@ export default function Hero() {
   })), []);
 
   return (
-    <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0">
+    <section
+      id="home"
+      ref={sectionRef}
+      onMouseMove={handlePointer}
+      className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0"
+    >
+      {/* Cursor spotlight */}
+      <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block" style={{ background: spotlight }} />
       {/* Enhanced Background with animated gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 dark:from-primary/20 dark:via-secondary/10 dark:to-primary/20 animate-gradient-shift [mask-image:linear-gradient(to_bottom,black_65%,transparent)]" />
       
@@ -70,10 +104,10 @@ export default function Hero() {
       <div className="container mx-auto px-4 z-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-16">
           {/* Text Content - Enhanced with staggered animations */}
+          <motion.div style={{ y: copyY, opacity: copyOpacity }} className="md:w-1/2 text-center md:text-left">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isVisible ? 1 : 0 }}
-            className="md:w-1/2 text-center md:text-left"
           >
             {/* Pre-headline tag - New addition */}
             <motion.p
@@ -90,17 +124,16 @@ export default function Hero() {
             </motion.p>
             
             {/* Headline with highlighted text */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <SplitText
+              as="h1"
+              onMount
+              delay={hold + 0.2}
               className="text-5xl md:text-7xl font-extrabold text-gray-800 dark:text-white mb-4 leading-tight"
-            >
-              Dinesh Babu{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                Surapaneni
-              </span>
-            </motion.h1>
+              segments={[
+                { text: 'Dinesh Babu' },
+                { text: 'Surapaneni', className: 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary' },
+              ]}
+            />
             
             {/* Typewriter effect for roles */}
             <motion.div
@@ -229,14 +262,17 @@ export default function Hero() {
               ))}
             </motion.div>
           </motion.div>
+          </motion.div>
 
-          {/* Image Section - Enhanced with 3D effect and glow */}
+          {/* Image Section - Enhanced with 3D effect and glow; drifts with scroll for depth */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVisible ? 1 : 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.94 }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ y: portraitY }}
             className="md:w-1/2 flex justify-center md:justify-end"
           >
+            <motion.div style={{ scale: portraitScale }}>
             <div className="relative w-72 h-72 md:w-96 md:h-96">
               {/* Decorative circles behind image */}
               <motion.div 
@@ -324,6 +360,7 @@ export default function Hero() {
                 />
               </motion.div>
             </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

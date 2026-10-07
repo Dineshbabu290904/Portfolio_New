@@ -128,3 +128,24 @@ code, kbd, samp, pre {
 ::-webkit-scrollbar-thumb:hover {
   @apply scrollbar-thumb-hover;
 }
+/* Cinematic film grain: an SVG noise tile, nudged in steps so it shimmers like film stock */
+.film-grain {
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  animation: grain-shift 0.9s steps(6) infinite;
+}
+
+.dark .film-grain {
+  opacity: 0.08;
+  mix-blend-mode: screen;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}

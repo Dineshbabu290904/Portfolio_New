@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
 import Section, { Chip, card } from './Section';
 import SkeletonImage from '../ui/SkeletonImage';
+import { RevealGroup, RevealItem } from '../motion/Reveal';
 import { projects } from '../../data/portfolio';
 
 const linkClass =
@@ -19,9 +20,14 @@ export default function ProjectsSection() {
       highlight="built"
       intro="A mix of full-stack products and machine learning work."
     >
-      <div className="grid gap-6 md:grid-cols-2">
+      <RevealGroup className="grid gap-6 md:grid-cols-2" stagger={0.12}>
         {projects.map((project) => (
-          <article key={project.id} className={`${card} overflow-hidden flex flex-col group`}>
+          <RevealItem
+            as="article"
+            key={project.id}
+            lift={6}
+            className={`${card} overflow-hidden flex flex-col group transition-[box-shadow,border-color] duration-500 hover:shadow-2xl hover:border-primary/30`}
+          >
             <Link to={`/projects/${project.id}`} className="block" aria-label={`${project.title} details`}>
               <SkeletonImage src={project.image} alt={project.title} className="w-full h-48" />
             </Link>
@@ -68,9 +74,9 @@ export default function ProjectsSection() {
                 )}
               </div>
             </div>
-          </article>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </Section>
   );
 }

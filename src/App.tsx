@@ -5,6 +5,7 @@ import OnePage from './components/OnePage';
 import ParticlesBackground from './components/ParticlesBackground';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
+import { FilmGrain, IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
 import { ProjectDetailSkeleton, TerminalSkeleton, GenericPageSkeleton } from './components/ui/Skeleton';
 import { isSectionPath } from './data/portfolio';
 import './index.css';
@@ -32,6 +33,9 @@ function App() {
         Skip to content
       </a>
       <ScrollToTop />
+      {pathname === '/' && <IntroCurtain />}
+      <ScrollProgress />
+      <FilmGrain />
       {/* ParticlesBackground and Navigation always visible */}
       <ParticlesBackground />
       <Navigation />

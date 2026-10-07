@@ -1,13 +1,14 @@
 import { Download, GraduationCap, MapPin, Award } from 'lucide-react';
 import Section, { Chip, card } from './Section';
+import { CountUp, RevealGroup, RevealItem } from '../motion/Reveal';
 import { certifications, education, highlights, profile } from '../../data/portfolio';
 
 export default function AboutSection() {
   return (
     <Section id="about" eyebrow="About" title="Engineer by trade," highlight="data nerd at heart">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+      <RevealGroup className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]" stagger={0.15}>
         {/* Profile card */}
-        <aside className={`${card} p-6 flex flex-col gap-5 self-start`}>
+        <RevealItem className={`${card} p-6 flex flex-col gap-5 self-start`}>
           <img
             src={`${import.meta.env.BASE_URL}asserts/about.jpg`}
             alt={profile.name}
@@ -36,9 +37,9 @@ export default function AboutSection() {
           >
             <Download size={16} /> View resume
           </a>
-        </aside>
+        </RevealItem>
 
-        <div className="flex flex-col gap-6 min-w-0">
+        <RevealItem className="flex flex-col gap-6 min-w-0">
           {/* Bio */}
           <div className={`${card} p-6 md:p-8`}>
             <div className="space-y-4 text-base md:text-lg leading-relaxed text-gray-700 dark:text-gray-300 max-w-[65ch]">
@@ -54,16 +55,16 @@ export default function AboutSection() {
           </div>
 
           {/* Highlights */}
-          <dl className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <RevealGroup as="dl" className="grid grid-cols-2 md:grid-cols-4 gap-4" stagger={0.1}>
             {highlights.map((item) => (
-              <div key={item.label} className={`${card} p-4 flex flex-col gap-1`}>
+              <RevealItem key={item.label} lift={4} className={`${card} p-4 flex flex-col gap-1 hover:shadow-lg transition-shadow duration-300`}>
                 <dt className="order-2 text-xs text-gray-500 dark:text-gray-400 leading-snug">{item.label}</dt>
                 <dd className="order-1 font-display text-2xl md:text-3xl font-extrabold tabular-nums text-gray-900 dark:text-white">
-                  {item.value}
+                  <CountUp value={item.value} />
                 </dd>
-              </div>
+              </RevealItem>
             ))}
-          </dl>
+          </RevealGroup>
 
           {/* Education + certifications */}
           <div className="grid gap-6 md:grid-cols-2">
@@ -101,8 +102,8 @@ export default function AboutSection() {
               </ul>
             </div>
           </div>
-        </div>
-      </div>
+        </RevealItem>
+      </RevealGroup>
     </Section>
   );
 }

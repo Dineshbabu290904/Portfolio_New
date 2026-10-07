@@ -119,7 +119,8 @@ export default function Contact() {
       <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
           variants={containerVariants}
         >
           
