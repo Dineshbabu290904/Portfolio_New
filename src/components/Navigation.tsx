@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu, X, Home, User, Briefcase, Code, Award, Mail,
-  ChevronRight, Star, Github, Linkedin, Twitter, ExternalLink,
-  Clock, ArrowRight, Download, Moon, Sun, Search, Terminal,
-  Activity
+  ChevronRight, Github, Linkedin,
+  ArrowRight, Download, Moon, Sun, Terminal
 } from 'lucide-react';
 
 export default function EnhancedNavigation() {
@@ -101,8 +100,8 @@ export default function EnhancedNavigation() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex-shrink-0 z-10 flex items-center">
-              <Link to="/" className={`font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary transition-all duration-300 ${scrolled ? 'scale-90' : 'scale-100'}`}>
-                DevPortfolio
+              <Link to="/" className={`font-display font-extrabold text-2xl tracking-tight text-gray-900 dark:text-white transition-all duration-300 ${scrolled ? 'scale-90' : 'scale-100'}`}>
+                Dinesh<span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Babu</span><span className="text-secondary">.</span>
               </Link>
             </div>
 
@@ -158,8 +157,8 @@ export default function EnhancedNavigation() {
             : 'bg-white/30 dark:bg-gray-900/30 backdrop-blur-md rounded-2xl'
           }`}>
           <div className="flex justify-between items-center p-4">
-            <Link to="/" className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              DP
+            <Link to="/" aria-label="Dinesh Babu, home" className="font-display font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">
+              D<span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">B</span><span className="text-secondary">.</span>
             </Link>
             <div className="flex items-center space-x-2">
               <button onClick={() => setShowSearch(!showSearch)} className="p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors" aria-label="Search">
@@ -200,8 +199,8 @@ export default function EnhancedNavigation() {
         <div className="flex flex-col h-full">
           <div className="p-5 sm:p-6 border-b border-gray-200/80 dark:border-gray-800/80">
             <div className="flex justify-between items-center">
-              <Link to="/" id="mobile-menu-title" className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary" onClick={() => setIsOpen(false)}>
-                DevPortfolio
+              <Link to="/" id="mobile-menu-title" className="font-display font-extrabold text-xl tracking-tight text-gray-900 dark:text-white" onClick={() => setIsOpen(false)}>
+                Dinesh<span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Babu</span><span className="text-secondary">.</span>
               </Link>
               <button onClick={() => setIsOpen(false)} className="p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors" aria-label="Close menu">
                 <X size={24} />

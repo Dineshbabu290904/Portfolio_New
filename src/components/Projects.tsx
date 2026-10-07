@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Code, Zap, BookOpen, Eye, ArrowRight } from 'lucide-react'; // Added Eye, ArrowRight
+import PageHeader from './ui/PageHeader';
+import SkeletonImage from './ui/SkeletonImage';
+import { Github, ExternalLink, Code, Zap, BookOpen, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
@@ -29,25 +31,17 @@ const cardVariants = {
 
 
 function Projects() {
-  const [isVisible, setIsVisible] = useState(false); // For overall section visibility trigger if needed
-  // activeProject state is removed as direct link navigation is primary
-
-  useEffect(() => {
-    // This can be used if you want to trigger animations once the component is mounted,
-    // but whileInView on individual elements is often more effective for scroll-triggered animations.
-    setIsVisible(true); 
-  }, []);
 
   // Particles for background effect (assuming this component is used within a layout that has it)
   // Or, if you want particles specific to this section:
-  const particles = Array.from({ length: 12 }).map((_, i) => ({ // Reduced count for subtlety
+  const particles = useMemo(() => Array.from({ length: 12 }).map((_, i) => ({ // Reduced count for subtlety
     id: i,
     size: Math.random() * 3 + 1.5, // Smaller particles
     x: Math.random() * 100,
     y: Math.random() * 100,
     duration: Math.random() * 35 + 25, // Slower, more gentle movement
     delay: Math.random() * 3,
-  }));
+  })), []);
 
   const projects = [
     {
@@ -132,29 +126,13 @@ function Projects() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={sectionFadeIn}
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
-        >
-          <span
-            className="inline-block mb-4 px-4 py-1.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light font-semibold text-sm shadow-sm"
-          >
-            <Code className="inline-block w-4 h-4 mr-2 align-text-bottom" />
-            My Portfolio Showcase
-          </span>
-          
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-800 dark:text-white mb-5 leading-tight">
-            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Projects</span>
-          </h1>
-          <div className="mt-3 mx-auto w-24 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
-          
-          <p className="mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-            A collection of my works demonstrating technical skills, creative problem-solving, and passion for building impactful solutions.
-          </p>
-        </motion.div>
+        <PageHeader
+          eyebrow="My Portfolio Showcase"
+          eyebrowIcon={<Code className="w-3.5 h-3.5" />}
+          title="Featured"
+          highlight="Projects"
+          subtitle="A collection of my work demonstrating technical skills, creative problem-solving, and a passion for building impactful solutions."
+        />
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -173,11 +151,7 @@ function Projects() {
             >
               <div className="relative">
                 <Link to={`/projects/${project.id}`} className="block">
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-56 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
+                  <SkeletonImage src={project.image} alt={project.title} className="w-full h-56" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
                 </Link>
                 <span className="absolute top-3 left-3 px-3 py-1 bg-black/50 text-white rounded-full text-xs font-medium backdrop-blur-sm shadow">

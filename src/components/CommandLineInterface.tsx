@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Terminal as TerminalIconLucide,
     Github, Linkedin, FileText, HelpCircle, Info, Package, Code, Calendar, Clock,
-    Cloud, History, Sun, Moon, Coffee, Gift, Users, Briefcase, Zap, Settings, Award, Search,
+    Cloud, History, Sun, Moon, Coffee, Gift, Users, Briefcase, Zap, Settings, Award,
     ExternalLink as LinkExternal,
     MessageSquare
 } from 'lucide-react';
@@ -14,7 +14,7 @@ import {
 interface CommandResponse {
   type: 'text' | 'error' | 'success' | 'component' | 'link' | 'code';
   content: string | React.ReactNode;
-  meta?: any;
+  meta?: string; // URL for link responses
   id: string;
 }
 
@@ -26,7 +26,7 @@ interface CommandHistoryItem {
 type ThemeType = 'dark' | 'light' | 'matrix' | 'retro' | 'nord' | 'solarized' | 'oceanic';
 
 interface ThemeConfig {
-  hoverBg: string;
+  hoverBg?: string;
   background: string;
   headerBg?: string;
   text: string;
@@ -63,6 +63,7 @@ interface CommandLineInterfaceProps {
   width?: string;         // e.g., "100%", "600px"
   height?: string;        // e.g., "100%", "400px"
   className?: string;     // For additional custom styling
+  onCloseRequest?: () => void; // Called on `exit` or when the red window button is clicked
 }
 
 // --- Themes Configuration ---
@@ -148,6 +149,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
   width = '90%',
   height = '600px',
   className = '',
+  onCloseRequest,
 }) => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState<CommandResponse[]>([]);
@@ -206,7 +208,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
 
   const commandGroups = useMemo(() => ({
     "Navigation": ["about", "projects", "skills", "experience", "contact", "social"],
-    "System": ["help", "clear", "history", "theme", "system-info", "exit"],
+    "System": ["whoami", "help", "clear", "history", "theme", "system-info", "exit"],
     "Tools": ["echo", "date", "time", "weather"],
     "Links": ["github", "linkedin", "resume"],
     "Fun": ["ascii-art", "joke", "fortune", "game", "coffee"]
@@ -222,6 +224,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
       case 'help': return <HelpCircle {...iconProps} />;
       case 'clear': return <Zap {...iconProps} />;
       case 'echo': return <MessageSquare {...iconProps} />;
+      case 'whoami': return <User {...iconProps} />;
       case 'about': return <Info {...iconProps} />;
       case 'exit': return <LinkExternal {...iconProps} />;
       case 'projects': return <Package {...iconProps} />;
@@ -345,11 +348,21 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
       case 'clear':
         clearOutput();
         return;
+      case 'whoami':
+        response.type = 'component';
+        response.content = (
+          <div className="space-y-0.5">
+            <p className={`font-semibold ${currentThemeConfig.primary}`}>Dinesh Babu Surapaneni</p>
+            <p>Associate Software Engineer @ <span className={currentThemeConfig.accentColor}>DAZN India</span>, Hyderabad</p>
+            <p className={currentThemeConfig.secondaryText}>Full-stack development · Data science · Machine learning</p>
+          </div>
+        );
+        break;
       case 'echo':
         response.type = 'text';
         response.content = args.length > 0 ? args.join(' ') : <span className={currentThemeConfig.secondaryText}>Usage: echo [text]</span>;
         break;
-      case 'about': case 'projects': case 'skills': case 'experience': case 'contact': case 'social':
+      case 'about': case 'projects': case 'skills': case 'experience': case 'contact': case 'social': {
         // Enhanced portfolio page redirection
         const portfolioPagesMap = { // Renamed to avoid conflict with default case
           'about': { title: 'About Me', icon: 'User', description: 'Learn about my background, interests, and professional journey.' },
@@ -368,9 +381,9 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           response = {
             type: 'link',
             content: <>{icon} Redirecting to {pageInfo.title}...</>,
-            meta: `/${command}`
+            meta: `${import.meta.env.BASE_URL}${command}`
           };
-          openLink(response.meta);
+          openLink(response.meta!);
         } else {
           response.type = 'component';
           response.content = (
@@ -424,6 +437,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           );
         }
         break;
+      }
       case 'theme':
         if (args.length === 0) {
           response.type = 'component';
@@ -560,7 +574,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           ),
           meta: 'https://github.com/Dineshbabu290904'
         };
-        openLink(response.meta);
+        openLink(response.meta!);
         break;
       case 'linkedin':
         response = {
@@ -573,7 +587,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           ),
           meta: 'https://www.linkedin.com/in/dinesh-babu-surapaneni/'
         };
-        openLink(response.meta);
+        openLink(response.meta!);
         break;
       case 'resume':
         response = {
@@ -586,9 +600,9 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           ),
           meta: 'https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view'
         };
-        openLink(response.meta);
+        openLink(response.meta!);
         break;
-      case 'ascii-art':
+      case 'ascii-art': {
         const arts = [
           `
      .~~~~.
@@ -638,7 +652,8 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
             </div>
           );
           break;
-      case 'joke':
+      }
+      case 'joke': {
         const jokes = [
           "Why don't programmers like nature? It has too many bugs.",
           "Why was the JavaScript developer sad? Because he didn't Node how to Express himself.",
@@ -663,7 +678,8 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           </div>
         );
         break;
-      case 'fortune':
+      }
+      case 'fortune': {
         const fortunes = [
           "A thrilling new adventure is in your near future.",
           "Your code will compile on the first try today.",
@@ -690,6 +706,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           </div>
         );
         break;
+      }
       case 'game':
         response.type = 'component';
         response.content = (
@@ -718,7 +735,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           </div>
         );
         break;
-      case 'system-info':
+      case 'system-info': {
         const userAgent = typeof window !== 'undefined' ? navigator.userAgent : 'N/A';
         const platform = typeof window !== 'undefined' ? (navigator.platform || 'N/A') : 'N/A';
         response.type = 'component';
@@ -759,6 +776,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           </div>
         );
         break;
+      }
       case 'coffee':
         response.type = 'component';
         response.content = (
@@ -787,11 +805,12 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           <div className="flex items-center gap-2">
             <LogOut size={14} className="text-red-400" />
             <div>
-              <p>Exiting portfolio CLI... Just kidding!</p>
-              <p className="text-xs opacity-80 mt-0.5">This is a web app, close the tab if you want. 😉</p>
+              <p>{onCloseRequest ? 'Exiting portfolio CLI... See you soon!' : 'Exiting portfolio CLI... Just kidding!'}</p>
+              <p className="text-xs opacity-80 mt-0.5">{onCloseRequest ? 'Taking you back to where you were. 👋' : 'This is a web app, close the tab if you want. 😉'}</p>
             </div>
           </div>
         );
+        if (onCloseRequest) setTimeout(onCloseRequest, 800);
         break;
       case 'welcome':
         response.type = 'component';
@@ -837,7 +856,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           </div>
         );
         break;
-      default:
+      default: {
         const cmdLower = command.toLowerCase();
         let bestMatch: string | null = null;
         const startsWithMatches = availableCommands.filter(c => c.startsWith(cmdLower));
@@ -926,9 +945,10 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
           );
         }
         break;
+      }
     }
     if (response?.content) appendOutput(prev => [...prev, response as CommandResponse]);
-  }, [availableCommands, getCommandIcon, commandGroups, clearOutput, setTheme]); // `setTheme` is stable, `clearOutput` is stable.
+  }, [availableCommands, getCommandIcon, commandGroups, clearOutput, setTheme, onCloseRequest]); // `setTheme` is stable, `clearOutput` is stable.
 
   const handleCommandInternal = useCallback(async (fullCommandToExecute: string) => {
     if (isProcessingCommand || !fullCommandToExecute.trim()) {
@@ -1062,7 +1082,13 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
     >
       <div className={`h-7 flex-shrink-0 ${currentTheme.headerBg || currentTheme.background} flex items-center px-3 border-b ${currentTheme.borderColor} select-none`}>
         <div className="flex space-x-1.5 mr-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-400/90"></div>
+          <button
+            type="button"
+            aria-label="Close terminal"
+            title="Close terminal"
+            onClick={(e) => { e.stopPropagation(); onCloseRequest?.(); }}
+            className="w-2.5 h-2.5 rounded-full bg-red-400/90 hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+          />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/90"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-green-400/90"></div>
         </div>

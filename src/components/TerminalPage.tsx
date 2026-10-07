@@ -1,4 +1,3 @@
-import React from 'react';
 import CommandLineInterface from '../components/CommandLineInterface'; // Adjust path as needed
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +10,7 @@ export default function TerminalPage() {
 
   return (
     <div 
-      className="min-h-screen w-full flex items-center justify-center p-4 selection:bg-green-400 selection:text-black"
+      className="min-h-screen w-full flex items-center justify-center px-4 pt-28 pb-8 selection:bg-green-400 selection:text-black"
       // Example: To add a background image for a more "desktop" feel:
       // style={{
       //   backgroundImage: "url('/path-to-your-desktop-wallpaper.jpg')",
@@ -19,7 +18,7 @@ export default function TerminalPage() {
       //   backgroundPosition: 'center',
       // }}
     >
-        <CommandLineInterface onCloseRequest={handleCloseTerminal} />
+        <CommandLineInterface onCloseRequest={handleCloseTerminal} height="min(600px, calc(100vh - 9rem))" />
     </div>
   );
 }

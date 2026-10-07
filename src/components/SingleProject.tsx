@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
-  Github, ExternalLink, Zap, ArrowLeft, Code as CodeIcon, Tag, ListChecks, Star as StarIcon,
-  CheckCircle, AlertTriangle, Layers, Share2, CalendarDays, Activity, Box, Palette, Briefcase, Cpu
+  Github, ExternalLink, Zap, ArrowLeft, Tag, ListChecks, Star as StarIcon,
+  CheckCircle, AlertTriangle, Share2, CalendarDays, Activity, Box, Palette, Briefcase, Cpu
 } from 'lucide-react'; // Added more icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 // --- Static Project Data (Keep as is) ---
-const projectsData = [
+const projectsData: Project[] = [
   {
     id: "bone-fracture-detection",
     title: "Bone Fracture Detection System",
@@ -96,6 +96,7 @@ const projectsData = [
     category: "Web Development",
     date: "Jan 2024", // Example date, please update
     image: "https://cdn.prod.website-files.com/65fabbf8f7f7323a634a308c/66c478f331c8f9c5995f02ba_Group%201171275868.png", // Replace with a relevant CMS image or screenshot
+    shortDescription: "MERN-stack college management system with dedicated student, faculty, and admin portals.",
     description: "A comprehensive management system built with the MERN stack, providing dedicated portals for students, faculty, and administrators to streamline academic record management, attendance tracking, and institutional communication.",
     detailedInfo: {
       problemStatement: "Educational institutions often struggle with disparate systems for managing student information, faculty tasks, and administrative duties, leading to inefficiencies and communication breakdowns.",
@@ -223,49 +224,13 @@ const itemVariants = {
 // --- SingleProject Component ---
 function SingleProject() {
   const { projectId } = useParams<{ projectId: string }>();
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Renamed for clarity
-  const [error, setError] = useState<string | null>(null);
+  // Project data is bundled locally, so look it up synchronously (no artificial loading delay).
+  const project = projectsData.find(p => p.id === projectId) ?? null;
+  const error = project ? null : "Project not found. It seems you've ventured into uncharted territory!";
 
   const { scrollYProgress } = useScroll();
   const heroImageScale = useTransform(scrollYProgress, [0, 0.3], [1.1, 1]); // Parallax effect for hero image
   const heroImageOpacity = useTransform(scrollYProgress, [0, 0.3], [0.3, 0.15]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setIsLoading(true);
-    const foundProject = projectsData.find(p => p.id === projectId);
-    
-    // Simulate API delay for better loading state visibility
-    const timer = setTimeout(() => {
-      if (foundProject) {
-        setProject(foundProject);
-      } else {
-        setError("Project not found. It seems you've ventured into uncharted territory!");
-      }
-      setIsLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [projectId]);
-
-  // --- Loading State ---
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-        <div className="text-center p-6">
-          <motion.div
-            className="w-16 h-16 mx-auto mb-6"
-            animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Layers size={64} className="text-primary dark:text-primary-light opacity-75" />
-          </motion.div>
-          <p className="text-lg font-medium text-gray-700 dark:text-gray-300">Conjuring project details...</p>
-        </div>
-      </div>
-    );
-  }
 
   // --- Error State ---
   if (error || !project) {

@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Zap, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const roles = ["Software Engineer at DAZN", "Full-Stack Developer", "Data Scientist", "Problem Solver"];
+
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTypingIndex, setActiveTypingIndex] = useState(0);
-  const roles = ["Data Scientist", "Software Developer", "ML Enthusiast", "Problem Solver"];
 
   useEffect(() => {
     setIsVisible(true);
@@ -20,13 +21,14 @@ export default function Hero() {
   }, []);
 
   // Particles for background effect
-  const particles = Array.from({ length: 20 }).map((_, i) => ({
+  // Memoized so particles don't jump to new positions every time the role text rotates
+  const particles = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
     id: i,
     size: Math.random() * 6 + 2,
     x: Math.random() * 100,
     y: Math.random() * 100,
     duration: Math.random() * 40 + 20
-  }));
+  })), []);
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0">
@@ -80,8 +82,11 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block mb-3 px-4 py-1 rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium text-sm"
             >
-              <Zap className="inline-block w-4 h-4 mr-1 mb-0.5" />
-              Welcome to my portfolio
+              <span className="relative inline-flex w-2 h-2 mr-2 mb-0.5 align-middle">
+                <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-500" />
+              </span>
+              Associate Software Engineer at <span className="font-bold">DAZN India</span>
             </motion.p>
             
             {/* Headline with highlighted text */}
@@ -102,10 +107,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="h-10 mb-6"
+              className="min-h-[2.5rem] mb-6"
             >
-              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 flex items-center justify-center md:justify-start">
-                I'm a {" "}
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 flex flex-wrap items-baseline justify-center md:justify-start gap-x-2">
+                <span className="whitespace-nowrap">I'm a</span>
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={activeTypingIndex}
@@ -113,7 +118,7 @@ export default function Hero() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
                     transition={{ duration: 0.3 }}
-                    className="ml-2 font-semibold text-primary"
+                    className="font-semibold text-primary"
                   >
                     {roles[activeTypingIndex]}
                   </motion.span>
@@ -135,8 +140,8 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-lg mx-auto md:mx-0"
             >
-              Passionate about turning data into insights and code into solutions. 
-              Focused on machine learning, web development, and creating impactful technology.
+              Building software for DAZN, the global sports streaming platform.
+              I enjoy turning data into insights and code into solutions, from full-stack web apps to machine learning.
             </motion.p>
 
             {/* Call-to-action buttons/links - Enhanced with hover effects */}
@@ -294,7 +299,7 @@ export default function Hero() {
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
-                    src="https://lh3.googleusercontent.com/pw/AP1GczOXE6-cOmg6MPy9KaLor0BF_xbzfEHgPH4C7Uj9mRj1O3GsyJCWM9PbCV-hdZNvtTEDYTJkqyXGTLO-Bwv1JdnB78AChu7O8Q-695GTxbaSkXFIZgTDGrSiK1XIO_cJ_PPvxKRampbhvger5zE29QI_=w255-h319-s-no-gm"
+                    src={`${import.meta.env.BASE_URL}asserts/profile.jpg`}
                     alt="Dinesh Babu Surapaneni Profile"
                     className="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-500"
                   />

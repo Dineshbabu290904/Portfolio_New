@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Briefcase, GraduationCap, Code,
-  Heart, Coffee, BookOpen, Lightbulb, Zap,
-  Users, Award, Sparkles, Brain, Activity, ExternalLink, FolderCode,
+  Heart, BookOpen, Lightbulb, Zap,
+  Users, Award, Sparkles, Brain, Activity, ExternalLink,
   Download,
   FolderArchiveIcon
 } from "lucide-react";
@@ -12,12 +12,12 @@ import { Link as RouterLink } from 'react-router-dom';
 // Personal data (remains the same as your last provided version)
 const personalInfo = {
   name: "Dinesh Babu Surapaneni",
-  title: "Data Scientist & Full Stack Developer",
+  title: "Associate Software Engineer at DAZN India",
   location: "Vijayawada, AP, India",
-  availability: "Open to Opportunities",
-  currentFocus: "Data Science & Web Development",
-  profileImage: "https://lh3.googleusercontent.com/pw/AP1GczO3WuHBOLUHiiEIeBy3lZSLLsKBko7p4RBTDQYt1v2Pt8urfHdKXvX6VqSjLGiwggtIW4t18WaIPyH3p4Y5WOahWbJeCA9nk0rZSNevSH3krUvGy-ur4qmuxU5zrlQW2jNiLTUXMMNY_t_EJbr5TPxO=w1544-h1469-s-no-gm?authuser=0?w=600&h=600&fit=crop&crop=faces",
-  bio: "A Data Science student from Vijayawada, passionate about AI/ML and Full Stack Development. I transform data into insights and build intelligent applications, driven by curiosity and a love for lifelong learning.",
+  availability: "Currently at DAZN India, Hyderabad",
+  currentFocus: "Software Development at DAZN",
+  profileImage: `${import.meta.env.BASE_URL}asserts/about.jpg`, // served from public/asserts
+  bio: "An Associate Software Engineer at DAZN India, the global sports streaming platform, with a B.Tech background in Computer Science Engineering (Data Science) from PVP Siddhartha Institute of Technology, Vijayawada. I build reliable software, enjoy turning data into insights, and stay driven by curiosity and a love for lifelong learning.",
   resumeUrl: "https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
 };
 
@@ -43,7 +43,7 @@ const coreCompetencies = [
 const education = [
   {
     id: "btech",
-    degree: "B.Tech in Computer Science & Engineering",
+    degree: "B.Tech in Computer Science Engineering (Data Science)",
     institution: "PVP Siddhartha Institute of Technology, Vijayawada",
     duration: "2022 - 2026 (Expected)",
     description: "Focus: Data Science, Machine Learning, Full Stack Development. CGPA: 8.5/10 (Current).",
@@ -199,7 +199,7 @@ export default function RedesignedAboutPage() {
       </div>
 
       {/* Sticky Header with semi-transparent background */}
-      <header className="relative z-20 top-2 pt-16 pb-6 px-4 bg-white/30 dark:bg-gray-800/30 sticky top-0 shadow-sm border-b border-gray-200/30 dark:border-gray-700/30">
+      <header className="relative z-20 pt-28 pb-6 px-4 bg-white/30 dark:bg-gray-800/30 shadow-sm border-b border-gray-200/30 dark:border-gray-700/30">
         <div className="container mx-auto">
           <motion.div 
             initial="hidden"
@@ -270,7 +270,7 @@ export default function RedesignedAboutPage() {
                             <img 
                               src={personalInfo.profileImage} 
                               alt={personalInfo.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover object-[50%_20%]"
                             />
                           </motion.div>
                         </div>
@@ -531,6 +531,9 @@ export default function RedesignedAboutPage() {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {[
+                        { name: "Smart Coder", provider: "Smart Interviews" },
+                        { name: "BCG Data Science Job Simulation", provider: "Forage" },
+                        { name: "SQL (Basic)", provider: "HackerRank" },
                         { name: "Machine Learning Specialization", provider: "NPTEL" },
                         { name: "Data Science Professional Certificate", provider: "Google Cloud" },
                         { name: "Full Stack Web Development Bootcamp", provider: "Codegnan" },
@@ -583,7 +586,7 @@ export default function RedesignedAboutPage() {
                     </h2>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {services.map((service, index) => (
+                    {services.map((service) => (
                       <motion.div
                         key={service.id}
                         variants={itemVariants}
@@ -640,7 +643,7 @@ export default function RedesignedAboutPage() {
           )}
         </AnimatePresence>
       </main>
-      <style jsx global>{`
+      <style>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }

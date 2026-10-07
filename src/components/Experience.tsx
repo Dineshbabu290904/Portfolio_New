@@ -1,12 +1,29 @@
-import React, { useState, useMemo } from 'react'; // Removed useEffect as it wasn't used directly
+import React, { useState } from 'react';
 import { 
-  Calendar, MapPin, Briefcase, ChevronDown, ChevronUp, Award,
-  CheckCircle, Zap, Sparkles, GraduationCap, GitBranch, Monitor, Link as LinkIcon // Added LinkIcon for resume
+  Calendar, MapPin, Briefcase, ChevronDown, Award,
+  CheckCircle, Sparkles, GraduationCap, GitBranch, Monitor, Link as LinkIcon // Added LinkIcon for resume
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageHeader from './ui/PageHeader';
 
 // Timeline data
 const timelineData = [ // Renamed to avoid conflict with experiences 'timeline' component
+  {
+    year: "2026",
+    title: "Intern to Associate Software Engineer at DAZN India",
+    detail: "Joined DAZN India in Hyderabad as a Software Developer Intern in January and converted to Associate Software Engineer in July, working on production features and critical fixes.",
+    icon: <Briefcase className="w-5 h-5 text-white" />,
+    color: "bg-amber-500",
+    borderColor: "border-amber-500"
+  },
+  {
+    year: "2025",
+    title: "DSA Mentoring & Competitive Programming",
+    detail: "Earned the Smart Interviews Smart Coder certification, mentored juniors as a DSA Student Mentor, and reached a global rank of 6407 in TCS CodeVita Season 12.",
+    icon: <Award className="w-5 h-5 text-white" />,
+    color: "bg-teal-500",
+    borderColor: "border-teal-500"
+  },
   {
     year: "2024",
     title: "Data Science Specialization & Advanced Projects",
@@ -35,6 +52,60 @@ const timelineData = [ // Renamed to avoid conflict with experiences 'timeline' 
 
 const experiencesData = [ // Renamed to avoid conflict
   {
+    company: 'DAZN India',
+    role: 'Associate Software Engineer',
+    duration: 'Jul 2026 - Present',
+    location: 'Hyderabad, India',
+    description: 'Building production features for DAZN, the global sports streaming platform, after converting from the internship to a full-time role.',
+    responsibilities: [
+      'Work on production features and critical fixes across services that serve millions of sports fans.',
+      'Apply caching, context propagation and system architecture practices to keep services scalable and reliable.',
+      'Debug real-world production issues by tracing how services communicate and how data flows through the system.',
+      'Collaborate across teams through code reviews, design discussions and knowledge-sharing sessions.'
+    ],
+    achievements: [
+      'Converted from Software Developer Intern to Associate Software Engineer after six months.'
+    ],
+    technologies: [] as string[],
+    featured: true,
+    current: true
+  },
+  {
+    company: 'DAZN India',
+    role: 'Software Developer Intern',
+    duration: 'Jan 2026 - Jul 2026',
+    location: 'Hyderabad, Telangana, India',
+    description: 'Started in a production-scale engineering team, learning how large streaming systems are built, reviewed and operated.',
+    responsibilities: [
+      'Contributed to production features and fixes alongside senior engineers.',
+      'Learned business context, code review workflows and debugging in a production environment.',
+      'Gained hands-on experience with caching, context propagation and service architecture.'
+    ],
+    achievements: [] as string[],
+    technologies: [] as string[],
+    featured: true
+  },
+  {
+    company: 'Smart Interviews',
+    role: 'DSA Student Mentor',
+    duration: 'Mar 2025 - Jan 2026 · Part-time',
+    location: 'PVPSIT, Vijayawada',
+    description: 'Mentored aspiring software engineers in Data Structures and Algorithms, fostering problem-solving skills and algorithmic thinking.',
+    responsibilities: [
+      'Conducted weekly, in-depth mentoring sessions on advanced DSA topics.',
+      'Designed and curated coding challenges and comprehensive practice problem sets.',
+      'Provided constructive code reviews and actionable optimization strategies.',
+      'Organized and facilitated competitive programming contests to enhance practical skills.'
+    ],
+    achievements: [
+      'Guided 140+ students to successfully navigate and clear technical interviews at leading tech firms.',
+      'Developed a structured DSA curriculum that was subsequently adopted by the department.',
+      'Completed the Smart Coder program with a top rating in the batch (certified Feb 2025).'
+    ],
+    technologies: ['Data Structures', 'Algorithms', 'Problem Solving', 'Java', 'C++', 'Python', 'Competitive Programming'],
+    featured: true
+  },
+  {
     company: 'Eduskills (Google Virtual)',
     role: 'Artificial Intelligence & Machine Learning Intern',
     duration: 'Jul 2024 - Sep 2024', // More readable format
@@ -53,34 +124,10 @@ const experiencesData = [ // Renamed to avoid conflict
     technologies: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV', 'NLTK', 'Pandas', 'Python'],
     featured: true
   },
-  {
-    company: 'Smart Interviews',
-    role: 'Data Structures & Algorithms Mentor',
-    duration: 'Feb 2025 - Jun 2025(Curently Working) - Part Time',
-    location: 'PVPSIT, Vijayawada',
-    description: 'Mentored aspiring software engineers in Data Structures and Algorithms, fostering problem-solving skills and algorithmic thinking.',
-    responsibilities: [
-      'Conducted weekly, in-depth mentoring sessions on advanced DSA topics.',
-      'Designed and curated coding challenges and comprehensive practice problem sets.',
-      'Provided constructive code reviews and actionable optimization strategies.',
-      'Organized and facilitated competitive programming contests to enhance practical skills.'
-    ],
-    achievements: [
-      'Guided 140+ students to successfully navigate and clear technical interviews at leading tech firms.',
-      'Developed a structured DSA curriculum that was subsequently adopted by the department.'
-    ],
-    technologies: ['Data Structures', 'Algorithms', 'Problem Solving', 'Java', 'C++', 'Python', 'Competitive Programming'],
-    featured: true
-  },
   
 ];
 
 // Animation Variants
-const sectionFadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
-};
-
 const listStaggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -98,14 +145,15 @@ const listItemFadeInUp = {
 };
 
 
-const ExperienceItem = ({ experience, isLast, index }: { /* Props type from previous version */
+const ExperienceItem = ({ experience, isLast }: { /* Props type from previous version */
   experience: {
     company: string; role: string; duration: string; location?: string; description: string;
-    responsibilities: string[]; achievements?: string[]; technologies: string[]; featured?: boolean;
+    responsibilities: string[]; achievements?: string[]; technologies: string[]; featured?: boolean; current?: boolean;
   };
   isLast: boolean; index: number;
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+ const [isExpanded, setIsExpanded] = useState(false);
+  const hasDetails = experience.responsibilities.length > 0 || (experience.achievements?.length ?? 0) > 0;
   
   return (
     <motion.div 
@@ -125,8 +173,17 @@ const ExperienceItem = ({ experience, isLast, index }: { /* Props type from prev
             <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-white leading-tight">
               {experience.role}
             </h3>
-            <p className="text-md text-primary dark:text-primary-light font-medium">
+            <p className="text-md text-primary dark:text-primary-light font-medium flex items-center gap-2 flex-wrap">
               {experience.company}
+              {experience.current && (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[0.7rem] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                  <span className="relative flex w-2 h-2">
+                    <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                    <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-500" />
+                  </span>
+                  Current role
+                </span>
+              )}
             </p>
         </div>
       </div>
@@ -146,7 +203,7 @@ const ExperienceItem = ({ experience, isLast, index }: { /* Props type from prev
         )}
         
         <div className="p-5 md:p-6">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.72rem] md:text-xs tabular-nums text-gray-500 dark:text-gray-400 mb-3">
               <div className="flex items-center">
                 <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
                 <span>{experience.duration}</span>
@@ -163,6 +220,7 @@ const ExperienceItem = ({ experience, isLast, index }: { /* Props type from prev
             {experience.description}
           </p>
           
+          {experience.technologies.length > 0 && (
           <div className="mb-4">
             <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">Technologies:</h4>
             <div className="flex flex-wrap gap-1.5">
@@ -175,7 +233,9 @@ const ExperienceItem = ({ experience, isLast, index }: { /* Props type from prev
                 ))}
             </div>
           </div>
+          )}
           
+          {hasDetails && (
           <div className="mt-4">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
@@ -229,6 +289,7 @@ const ExperienceItem = ({ experience, isLast, index }: { /* Props type from prev
             )}
             </AnimatePresence>
           </div>
+          )}
         </div>
       </div>
     </motion.div>
@@ -252,11 +313,11 @@ const TimelineCard = ({ item, index }: { item: typeof timelineData[0], index: nu
                                 ${index % 2 === 0 ? '-right-2 transform translate-x-1/2' : '-left-2 transform -translate-x-1/2'}`}>
                 </div>
                 
-                <div className="flex items-center mb-2 sm:justify-start ${index % 2 !== 0 ? 'sm:flex-row-reverse sm:text-right' : ''}">
+                <div className={`flex items-center mb-2 sm:justify-start ${index % 2 !== 0 ? 'sm:flex-row-reverse sm:text-right' : ''}`}>
                     <div className={`sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-full ${item.color} mr-3 text-white shadow-md`}>
                         {React.cloneElement(item.icon, { className: "w-4 h-4"})}
                     </div>
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full text-white ${item.color} shadow-sm`}>
+                    <span className={`font-mono text-xs font-semibold tabular-nums px-3 py-1 rounded-full text-white ${item.color} shadow-sm`}>
                         {item.year}
                     </span>
                 </div>
@@ -301,22 +362,13 @@ export default function Experience() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Work Experience Section */}
         <div className="max-w-4xl mx-auto mb-20 md:mb-28"> {/* Increased bottom margin */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={sectionFadeInUp}
-            className="text-center mb-12 md:mb-16"
-          >
-            <span className="inline-block px-4 py-1.5 mb-3 text-sm font-semibold rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light shadow-sm">
-              <Sparkles className="inline-block w-4 h-4 mr-1.5 align-text-bottom" />
-              Career Milestones
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white leading-tight">
-              Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Experience</span>
-            </h2>
-            <div className="mt-4 mx-auto w-24 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
-          </motion.div>
+          <PageHeader
+            eyebrow="Career Milestones"
+            eyebrowIcon={<Sparkles className="w-3.5 h-3.5" />}
+            title="Professional"
+            highlight="Experience"
+            subtitle="Currently an Associate Software Engineer at DAZN India in Hyderabad. Here is the path that led there."
+          />
           
           <motion.div 
             initial={{opacity: 0}} animate={{opacity:1}} transition={{delay: 0.3}}
@@ -367,29 +419,20 @@ export default function Experience() {
 
         {/* "My Journey So Far" Timeline Section */}
         <div className="max-w-4xl mx-auto">
-            <motion.div
-                initial="hidden"
-                whileInView="visible"
-                variants={sectionFadeInUp} // Use sectionFadeInUp for the heading
-                viewport={{ once: true, amount: 0.2 }}
-                className="text-center mb-12 md:mb-16"
-            >
-                <span className="inline-block px-4 py-1.5 mb-3 text-sm font-semibold rounded-full bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary-light shadow-sm">
-                    <GitBranch className="inline-block w-4 h-4 mr-1.5 align-text-bottom" />
-                    My Growth Path
-                </span>
-                <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 dark:text-white leading-tight">
-                    Journey <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary">Highlights</span>
-                </h2>
-                <div className="mt-4 mx-auto w-24 h-1.5 bg-gradient-to-r from-secondary to-primary rounded-full"></div>
-            </motion.div>
+            <PageHeader
+                as="h2"
+                tone="secondary"
+                eyebrow="My Growth Path"
+                eyebrowIcon={<GitBranch className="w-3.5 h-3.5" />}
+                title="Journey"
+                highlight="Highlights"
+            />
 
             <motion.div 
                 className="relative"
                 variants={listStaggerContainer}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.05 }}
+                animate="visible"
             >
                 {/* Desktop Timeline Line */}
                 <div className="hidden sm:block absolute top-6 bottom-6 left-1/2 w-1 bg-gradient-to-b from-primary/30 via-secondary/30 to-primary/30 dark:from-primary-light/30 dark:via-secondary-light/30 dark:to-primary-light/30 transform -translate-x-1/2 rounded-full"></div>
@@ -402,7 +445,7 @@ export default function Experience() {
           
         <motion.div 
             className="mt-16 md:mt-20 text-center"
-            initial={{opacity:0, y:20}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{delay:0.4}}
+            initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{delay:0.6}}
         >
             <p className="text-gray-600 dark:text-gray-400 mb-4">Interested in my full professional background?</p>
             <motion.a 
@@ -418,7 +461,7 @@ export default function Experience() {
             </motion.a>
         </motion.div>
       </div>
-      <style jsx global>{`
+      <style>{`
         /* Helper for primary color RGB value for shadow (can be set in global CSS or via JS) */
         /* :root { --color-primary-rgb: 59, 130, 246; } /* Example Blue */
 

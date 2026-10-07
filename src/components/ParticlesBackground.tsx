@@ -1,14 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Particles from 'react-particles';
 import { Engine } from 'tsparticles-engine';
 import { loadFull } from "tsparticles";
 
 export default function ParticlesBackground() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // Calmer background for users who prefer reduced motion, and fewer particles on small screens
+  const [prefersReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+  const [isSmallScreen] = useState(() => window.innerWidth < 768);
   
   useEffect(() => {
-    // Setup dark mode detector
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
       const isDark = 
         document.documentElement.classList.contains('dark') || 
@@ -49,11 +52,11 @@ export default function ParticlesBackground() {
             value: 'transparent',
           },
         },
-        fpsLimit: 120,
+        fpsLimit: 60,
         interactivity: {
           events: {
             onHover: {
-              enable: true,
+              enable: !prefersReducedMotion,
               mode: 'repulse',
             },
             resize: true,
@@ -78,7 +81,7 @@ export default function ParticlesBackground() {
           },
           move: {
             direction: 'none',
-            enable: true,
+            enable: !prefersReducedMotion,
             outModes: {
               default: 'bounce',
             },
@@ -91,7 +94,7 @@ export default function ParticlesBackground() {
               enable: true,
               area: 800,
             },
-            value: 80,
+            value: isSmallScreen ? 40 : 80,
           },
           opacity: {
             value: 0.5,
