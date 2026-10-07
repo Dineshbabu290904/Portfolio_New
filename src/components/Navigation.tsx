@@ -68,7 +68,7 @@ export default function EnhancedNavigation() {
       <div className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'py-2 max-lg:bg-gray-50/95 max-lg:dark:bg-gray-900/95' : 'py-4'}`}>
         {/* Desktop Navigation - UPDATED LAYOUT */}
         <div className={`hidden lg:block max-w-7xl mx-auto transition-all duration-300 ${scrolled
-            ? 'bg-white/80 dark:bg-gray-900/80 shadow-lg backdrop-blur-lg rounded-full px-6'
+            ? 'bg-white/95 dark:bg-gray-900/95 shadow-lg rounded-full px-6'
             : 'bg-transparent px-8'
           }`}>
           <div className="flex items-center justify-between h-16">
@@ -81,7 +81,7 @@ export default function EnhancedNavigation() {
 
             {/* Navigation Items - USING FLEX LAYOUT INSTEAD OF ABSOLUTE POSITIONING */}
             <div className="flex-grow flex items-center justify-center mx-4">
-              <div className={`flex items-center space-x-1 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-full transition-all duration-300 ${scrolled ? 'px-2 py-1' : 'px-3 py-2'}`}>
+              <div className={`flex items-center space-x-1 bg-white/60 dark:bg-gray-800/60 rounded-full transition-all duration-300 ${scrolled ? 'px-2 py-1' : 'px-3 py-2'}`}>
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
@@ -126,8 +126,8 @@ export default function EnhancedNavigation() {
 
         {/* Mobile Navigation - No changes needed here */}
         <div className={`lg:hidden mx-4 transition-all duration-300 ${scrolled
-            ? 'bg-white/80 dark:bg-gray-900/80 shadow-lg backdrop-blur-lg rounded-2xl'
-            : 'bg-white/30 dark:bg-gray-900/30 backdrop-blur-md rounded-2xl'
+            ? 'bg-white/95 dark:bg-gray-900/95 shadow-lg rounded-2xl'
+            : 'bg-white/70 dark:bg-gray-900/70 rounded-2xl'
           }`}>
           <div className="flex justify-between items-center p-4">
             <Link to="/" aria-label="Dinesh Babu, home" className="font-display font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">
@@ -148,7 +148,7 @@ export default function EnhancedNavigation() {
         </div>
 
         {/* Mobile Bottom Navigation Bar (first 5 items) */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-gray-900/90 shadow-[0_-2px_10px_-3px_rgba(0,0,0,0.1)] border-t border-gray-200/80 dark:border-gray-800/80 backdrop-blur-md py-2 px-4 sm:px-6 lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 shadow-[0_-2px_10px_-3px_rgba(0,0,0,0.1)] border-t border-gray-200/80 dark:border-gray-800/80 py-2 px-4 sm:px-6 lg:hidden">
           <div className="flex justify-around items-center max-w-md mx-auto">
             {navItems.slice(0, 6).map((item) => ( // Display first 5 items or adjust as needed
               <Link key={item.name} to={item.route} className="flex flex-col items-center justify-center w-1/5 p-1 group" aria-label={item.name} onClick={() => setIsOpen(false)}>

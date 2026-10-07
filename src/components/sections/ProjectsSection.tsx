@@ -26,7 +26,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <>
       <Link to={`/projects/${project.id}`} data-cursor="View" className="block relative" aria-label={`${project.title} details`}>
         <SkeletonImage src={project.image} alt={project.title} className="w-full h-48" />
-        <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/55 text-white backdrop-blur-sm">
+        <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/65 text-white">
           {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
         </span>
       </Link>
@@ -148,8 +148,8 @@ function ProjectsFilmStrip() {
           {projects.map((project, i) => (
             <motion.article
               key={project.id}
-              initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ y: -6 }}

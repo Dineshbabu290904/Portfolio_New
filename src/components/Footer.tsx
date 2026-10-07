@@ -17,7 +17,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 border-t border-gray-200/70 dark:border-gray-800 bg-white/70 dark:bg-gray-900/80 backdrop-blur-md">
+    <footer className="relative z-10 border-t border-gray-200/70 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90">
       <div className="container mx-auto px-4 py-10 grid gap-8 md:grid-cols-3 md:items-start">
         <div className="space-y-2">
           <Link to="/" className="font-display text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">

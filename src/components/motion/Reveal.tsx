@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { animate, motion, useInView, useReducedMotion, type Variants } from 'framer-motion';
 
-// Cinematic "focus pull": content rises slightly and sharpens from a blur as it enters the viewport.
+// Content rises slightly and fades in as it enters the viewport. Transform and opacity only:
+// a blur here re-rasterised every revealing element on each frame and made scrolling stutter.
 const focusPull: Variants = {
-  hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
   },
 };
 

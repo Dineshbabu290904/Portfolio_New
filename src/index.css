@@ -131,24 +131,23 @@ code, kbd, samp, pre {
 /* ---------- Immersive atmosphere ---------- */
 .aurora-blob {
   position: absolute;
-  border-radius: 9999px;
-  filter: blur(70px);
+  /* Soft falloff comes from the gradient itself: a CSS blur filter here cost ~80ms per frame. */
   opacity: 0.3;
   will-change: transform;
 }
 .aurora-a {
   width: 46vw; height: 46vw; left: 8%; top: 4%;
-  background: radial-gradient(circle, rgb(var(--c-primary)) 0%, transparent 70%);
+  background: radial-gradient(circle closest-side, rgb(var(--c-primary)) 0%, rgb(var(--c-primary) / 0.55) 35%, rgb(var(--c-primary) / 0.18) 65%, transparent 100%);
   animation: aurora-drift-a 28s ease-in-out infinite alternate;
 }
 .aurora-b {
   width: 40vw; height: 40vw; right: 6%; top: 30%;
-  background: radial-gradient(circle, rgb(var(--c-secondary)) 0%, transparent 70%);
+  background: radial-gradient(circle closest-side, rgb(var(--c-secondary)) 0%, rgb(var(--c-secondary) / 0.55) 35%, rgb(var(--c-secondary) / 0.18) 65%, transparent 100%);
   animation: aurora-drift-b 34s ease-in-out infinite alternate;
 }
 .aurora-c {
   width: 34vw; height: 34vw; left: 30%; top: 62%;
-  background: radial-gradient(circle, rgb(var(--c-accent)) 0%, transparent 70%);
+  background: radial-gradient(circle closest-side, rgb(var(--c-accent)) 0%, rgb(var(--c-accent) / 0.55) 35%, rgb(var(--c-accent) / 0.18) 65%, transparent 100%);
   opacity: 0.16;
   animation: aurora-drift-c 40s ease-in-out infinite alternate;
 }
