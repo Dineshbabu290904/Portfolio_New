@@ -6,7 +6,8 @@ import {
   Send, 
   Phone, 
   MapPin, 
-  Loader2
+  Loader2,
+  FileText
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -293,7 +294,7 @@ export default function Contact() {
                     <div>
                       <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300">Location</h4>
                       <p className="text-gray-600 dark:text-gray-400">
-                        Vijayawada, Andhra Pradesh, India
+                        Hyderabad, Telangana, India
                       </p>
                     </div>
                   </div>
@@ -322,7 +323,7 @@ export default function Contact() {
               {/* Social Links */}
               <motion.div variants={infoVariants}>
                 <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Connect</h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   {/* GitHub */}
                   <motion.a
                     whileHover={{ scale: 1.1 }}
@@ -360,6 +361,14 @@ export default function Contact() {
                   >
                     <Mail className="w-5 h-5" />
                   </motion.a>
+                  <a
+                    href="https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-primary/40 text-primary dark:text-primary-light text-sm font-semibold hover:bg-primary/10 transition-colors"
+                  >
+                    <FileText className="w-4 h-4" /> Resume
+                  </a>
                 </div>
               </motion.div>
             </motion.div>

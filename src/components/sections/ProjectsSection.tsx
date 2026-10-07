@@ -13,6 +13,7 @@ export default function ProjectsSection() {
   return (
     <Section
       id="projects"
+      band
       eyebrow="Projects"
       title="Things I've"
       highlight="built"

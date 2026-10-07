@@ -6,6 +6,7 @@ export default function ExperienceSection() {
   return (
     <Section
       id="experience"
+      band
       eyebrow="Experience"
       title="Where I've"
       highlight="worked"

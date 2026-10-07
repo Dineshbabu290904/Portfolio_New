@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Mail, Terminal } from 'lucide-react';
+import { ArrowUp, Github, Linkedin, Mail, Terminal } from 'lucide-react';
 
 const pages = [
   { label: 'About', to: '/about' },
-  { label: 'Skills', to: '/skills' },
   { label: 'Experience', to: '/experience' },
+  { label: 'Skills', to: '/skills' },
   { label: 'Projects', to: '/projects' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -66,9 +66,17 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-200/70 dark:border-gray-800">
-        <p className="container mx-auto px-4 py-4 text-xs text-gray-500 dark:text-gray-500 font-mono">
-          © {new Date().getFullYear()} Dinesh Babu Surapaneni · Built with React, TypeScript &amp; Tailwind CSS
-        </p>
+        <div className="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs text-gray-500 dark:text-gray-500 font-mono">
+            © {new Date().getFullYear()} Dinesh Babu Surapaneni · Built with React, TypeScript &amp; Tailwind CSS
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500 hover:text-primary dark:hover:text-primary-light transition-colors"
+          >
+            <ArrowUp size={14} /> Back to top
+          </Link>
+        </div>
       </div>
     </footer>
   );

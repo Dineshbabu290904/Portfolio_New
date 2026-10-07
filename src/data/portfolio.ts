@@ -242,7 +242,7 @@ export const education = [
     degree: 'B.Tech, Computer Science Engineering (Data Science)',
     institution: 'PVP Siddhartha Institute of Technology, Vijayawada',
     duration: '2022 – 2026',
-    note: 'CGPA 8.5/10',
+    note: 'CGPA 8.0/10',
   },
   {
     degree: 'Intermediate Education',

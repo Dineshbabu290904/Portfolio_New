@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, ArrowRight, Download, Code, Zap, Star } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowRight, Download, Code, Briefcase, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const roles = ["Software Engineer at DAZN", "Full-Stack Developer", "Data Scientist", "Problem Solver"];
@@ -33,7 +33,7 @@ export default function Hero() {
   return (
     <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0">
       {/* Enhanced Background with animated gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 dark:from-primary/20 dark:via-secondary/10 dark:to-primary/20 animate-gradient-shift" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 dark:from-primary/20 dark:via-secondary/10 dark:to-primary/20 animate-gradient-shift [mask-image:linear-gradient(to_bottom,black_65%,transparent)]" />
       
       {/* Particle Background Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -210,25 +210,23 @@ export default function Hero() {
               </div>
             </motion.div>
             
-            {/* Stats - New feature */}
+            {/* Quick facts */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.6, delay: 1.1 }}
-              className="grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0"
+              className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3 text-sm text-gray-600 dark:text-gray-300"
             >
-              <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm shadow-lg border border-gray-200 dark:border-gray-700">
-                <Code className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">10+ Projects</p>
-              </div>
-              <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm shadow-lg border border-gray-200 dark:border-gray-700">
-                <Star className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">5+ Skills</p>
-              </div>
-              <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm shadow-lg border border-gray-200 dark:border-gray-700">
-                <Zap className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">3+ Years</p>
-              </div>
+              {[
+                { icon: <Briefcase className="w-4 h-4" />, text: 'DAZN India' },
+                { icon: <MapPin className="w-4 h-4" />, text: 'Hyderabad, India' },
+                { icon: <Code className="w-4 h-4" />, text: 'Full-stack · ML' },
+              ].map((fact) => (
+                <span key={fact.text} className="inline-flex items-center gap-2">
+                  <span className="text-primary dark:text-primary-light">{fact.icon}</span>
+                  {fact.text}
+                </span>
+              ))}
             </motion.div>
           </motion.div>
 

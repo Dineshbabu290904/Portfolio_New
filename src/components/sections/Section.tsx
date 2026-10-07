@@ -8,12 +8,18 @@ interface SectionProps {
   intro?: string;
   children: ReactNode;
   className?: string;
+  /** Soft tinted band behind the section, used on alternating sections for rhythm. */
+  band?: boolean;
 }
 
 // Shared layout for every section on the one-page site: anchor target, heading block, content.
-export default function Section({ id, eyebrow, title, highlight, intro, children, className = '' }: SectionProps) {
+export default function Section({ id, eyebrow, title, highlight, intro, children, className = '', band = false }: SectionProps) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className={`scroll-mt-24 py-16 md:py-24 ${className}`}>
+    <section
+      id={id}
+      aria-labelledby={`${id}-title`}
+      className={`relative scroll-mt-24 py-16 md:py-24 ${band ? 'bg-white/50 dark:bg-gray-800/25 border-y border-gray-200/60 dark:border-gray-800' : ''} ${className}`}
+    >
       <div className="container mx-auto px-4 max-w-6xl">
         <header className="mb-10 md:mb-14 max-w-2xl">
           <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3">

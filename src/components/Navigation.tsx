@@ -91,7 +91,7 @@ export default function EnhancedNavigation() {
 
   return (
     <>
-      <div className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'py-2' : 'py-4'}`}>
+      <div className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'py-2 max-lg:bg-gray-50/95 max-lg:dark:bg-gray-900/95' : 'py-4'}`}>
         {/* Desktop Navigation - UPDATED LAYOUT */}
         <div className={`hidden lg:block max-w-7xl mx-auto transition-all duration-300 ${scrolled
             ? 'bg-white/80 dark:bg-gray-900/80 shadow-lg backdrop-blur-lg rounded-full px-6'

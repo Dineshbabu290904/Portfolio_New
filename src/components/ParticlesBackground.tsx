@@ -74,9 +74,9 @@ export default function ParticlesBackground() {
           },
           links: {
             color: isDarkMode ? '#50C4FF' : '#2A2A72',
-            distance: 150,
+            distance: 140,
             enable: true,
-            opacity: 0.5,
+            opacity: 0.22,
             width: 1,
           },
           move: {
@@ -94,10 +94,10 @@ export default function ParticlesBackground() {
               enable: true,
               area: 800,
             },
-            value: isSmallScreen ? 40 : 80,
+            value: isSmallScreen ? 28 : 55,
           },
           opacity: {
-            value: 0.5,
+            value: 0.35,
           },
           shape: {
             type: 'circle',

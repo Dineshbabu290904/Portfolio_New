@@ -56,9 +56,9 @@ export default function AboutSection() {
           {/* Highlights */}
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {highlights.map((item) => (
-              <div key={item.label} className={`${card} p-4 flex flex-col-reverse gap-1`}>
-                <dt className="text-xs text-gray-500 dark:text-gray-400 leading-snug">{item.label}</dt>
-                <dd className="font-display text-2xl md:text-3xl font-extrabold tabular-nums text-gray-900 dark:text-white">
+              <div key={item.label} className={`${card} p-4 flex flex-col gap-1`}>
+                <dt className="order-2 text-xs text-gray-500 dark:text-gray-400 leading-snug">{item.label}</dt>
+                <dd className="order-1 font-display text-2xl md:text-3xl font-extrabold tabular-nums text-gray-900 dark:text-white">
                   {item.value}
                 </dd>
               </div>
