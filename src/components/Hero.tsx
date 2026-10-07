@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, type MouseEvent } from 'react';
-import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { SplitText } from './motion/Reveal';
 import { Magnetic } from './motion/Atmosphere';
 import { INTRO_HOLD, shouldPlayIntro } from '../lib/intro';
@@ -16,23 +16,23 @@ export default function Hero() {
 
   // Cursor spotlight: a soft light that follows the pointer across the hero.
   const sectionRef = useRef<HTMLElement>(null);
-  const spotX = useMotionValue(-1000);
-  const spotY = useMotionValue(-1000);
-  const spotlight = useMotionTemplate`radial-gradient(520px circle at ${spotX}px ${spotY}px, rgb(var(--c-secondary) / 0.16), transparent 70%)`;
+  // A fixed-size glow moved with transforms (cheap), rather than repainting a full-hero gradient.
+  const spotX = useSpring(useMotionValue(-1000), { stiffness: 200, damping: 30 });
+  const spotY = useSpring(useMotionValue(-1000), { stiffness: 200, damping: 30 });
   const handlePointer = (e: MouseEvent<HTMLElement>) => {
     const rect = sectionRef.current?.getBoundingClientRect();
     if (!rect) return;
-    spotX.set(e.clientX - rect.left);
-    spotY.set(e.clientY - rect.top);
+    spotX.set(e.clientX - rect.left - 260);
+    spotY.set(e.clientY - rect.top - 260);
   };
 
   // Parallax: as the page scrolls away, the portrait drifts and the copy lifts and fades like a camera pull-back.
   const { scrollY } = useScroll();
-  const smoothY = useSpring(scrollY, { stiffness: 120, damping: 30, mass: 0.4 });
-  const portraitY = useTransform(smoothY, [0, 700], [0, 120]);
-  const portraitScale = useTransform(smoothY, [0, 700], [1, 0.92]);
-  const copyY = useTransform(smoothY, [0, 700], [0, -60]);
-  const copyOpacity = useTransform(smoothY, [0, 700], [1, 0.6]);
+  // Mapped straight from scroll (no spring), so the parallax tracks the wheel without lag.
+  const portraitY = useTransform(scrollY, [0, 700], [0, 80]);
+  const portraitScale = useTransform(scrollY, [0, 700], [1, 0.94]);
+  const copyY = useTransform(scrollY, [0, 700], [0, -40]);
+  const copyOpacity = useTransform(scrollY, [0, 700], [1, 0.7]);
 
   useEffect(() => {
     const reveal = setTimeout(() => setIsVisible(true), hold * 1000);
@@ -66,7 +66,11 @@ export default function Hero() {
       className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0"
     >
       {/* Cursor spotlight */}
-      <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block" style={{ background: spotlight }} />
+      <motion.div
+        aria-hidden="true"
+        style={{ x: spotX, y: spotY }}
+        className="pointer-events-none absolute left-0 top-0 hidden md:block w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgb(var(--c-secondary)/0.16),transparent_70%)] will-change-transform"
+      />
       {/* Enhanced Background with animated gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 dark:from-primary/20 dark:via-secondary/10 dark:to-primary/20 animate-gradient-shift [mask-image:linear-gradient(to_bottom,black_65%,transparent)]" />
       

@@ -11,17 +11,15 @@ import {
 } from 'framer-motion';
 
 // Fixed backdrop for the whole site: slow-drifting aurora light in the brand colors over a faint
-// engineering dot grid. The aurora also leans gently with the scroll position.
+// engineering dot grid. It drifts on its own (CSS transforms only) and does no work while scrolling.
 export function Aurora() {
-  const { scrollYProgress } = useScroll();
-  const shift = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <motion.div style={{ y: shift }} className="absolute inset-[-20%]">
+      <div className="absolute inset-[-20%]">
         <div className="aurora-blob aurora-a" />
         <div className="aurora-blob aurora-b" />
         <div className="aurora-blob aurora-c" />
-      </motion.div>
+      </div>
       <div className="absolute inset-0 dot-grid" />
     </div>
   );
@@ -29,8 +27,9 @@ export function Aurora() {
 
 const finePointer = () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-// Custom cursor for mouse users: a dot that tracks exactly and a ring that trails behind.
+// Cursor follower for mouse users: the system pointer stays visible and a ring trails behind it.
 // Over links and buttons the ring grows; elements with data-cursor="View" show that label inside it.
+// It sits above every overlay and uses difference blending, so it reads on light and dark backgrounds.
 export function Cursor() {
   const reduced = useReducedMotion();
   const [enabled] = useState(finePointer);
@@ -44,7 +43,6 @@ export function Cursor() {
 
   useEffect(() => {
     if (!enabled) return;
-    document.documentElement.classList.add('has-custom-cursor');
     const move = (e: PointerEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
@@ -61,7 +59,6 @@ export function Cursor() {
     window.addEventListener('pointerdown', press);
     window.addEventListener('pointerup', release);
     return () => {
-      document.documentElement.classList.remove('has-custom-cursor');
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerover', over);
       window.removeEventListener('pointerdown', press);
@@ -70,35 +67,24 @@ export function Cursor() {
   }, [enabled, x, y]);
 
   if (!enabled) return null;
-  const size = label ? 84 : hovering ? 52 : 34;
+  const size = label ? 84 : hovering ? 46 : 28;
 
   return (
-    <>
+    <motion.div
+      aria-hidden="true"
+      style={{ x: reduced ? x : ringX, y: reduced ? y : ringY }}
+      className={`pointer-events-none fixed left-0 top-0 z-[200] ${label ? '' : 'mix-blend-difference'}`}
+    >
       <motion.div
-        aria-hidden="true"
-        style={{ x, y }}
-        className="pointer-events-none fixed left-0 top-0 z-[90] -ml-1 -mt-1 h-2 w-2 rounded-full bg-primary dark:bg-secondary"
-      />
-      <motion.div
-        aria-hidden="true"
-        style={{ x: reduced ? x : ringX, y: reduced ? y : ringY }}
-        className="pointer-events-none fixed left-0 top-0 z-[89]"
+        animate={{ width: size, height: size, scale: down ? 0.85 : 1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+        className={`-translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center ${
+          label ? 'bg-primary dark:bg-secondary text-white dark:text-gray-900 shadow-lg' : hovering ? 'border-2 border-white' : 'border border-white/70'
+        }`}
       >
-        <motion.div
-          animate={{ width: size, height: size, scale: down ? 0.85 : 1 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-          className={`-translate-x-1/2 -translate-y-1/2 rounded-full border flex items-center justify-center ${
-            label
-              ? 'bg-primary/90 dark:bg-secondary/90 border-transparent text-white dark:text-gray-900'
-              : hovering
-                ? 'border-primary/60 dark:border-secondary/60 bg-primary/10'
-                : 'border-gray-500/40 dark:border-white/30'
-          }`}
-        >
-          {label && <span className="font-mono text-[0.65rem] uppercase tracking-[0.15em]">{label}</span>}
-        </motion.div>
+        {label && <span className="font-mono text-[0.65rem] uppercase tracking-[0.15em]">{label}</span>}
       </motion.div>
-    </>
+    </motion.div>
   );
 }
 
@@ -141,7 +127,8 @@ export function Marquee({ children, baseVelocity = -2, className = '' }: { child
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const velocity = useSpring(useVelocity(scrollY), { damping: 50, stiffness: 400 });
-  const factor = useTransform(velocity, [-1500, 0, 1500], [-4, 0, 4], { clamp: false });
+  // Scroll speed nudges the marquee a little (at most 1.5x faster) instead of whipping it along.
+  const factor = useTransform(velocity, [-2000, 0, 2000], [-1.5, 0, 1.5]);
   const direction = useRef(1);
   const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
 

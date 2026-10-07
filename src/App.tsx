@@ -5,7 +5,7 @@ import OnePage from './components/OnePage';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
-import { FilmGrain, IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
+import { IntroCurtain, ScrollProgress } from './components/motion/Cinematic';
 import { Aurora, Cursor } from './components/motion/Atmosphere';
 import { ProjectDetailSkeleton, TerminalSkeleton, GenericPageSkeleton } from './components/ui/Skeleton';
 import { isSectionPath } from './data/portfolio';
@@ -36,7 +36,6 @@ function App() {
       <ScrollToTop />
       {pathname === '/' && <IntroCurtain />}
       <ScrollProgress />
-      <FilmGrain />
       {/* Ambient backdrop and custom cursor; navigation always visible */}
       <Aurora />
       <Cursor />

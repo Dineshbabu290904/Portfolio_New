@@ -73,7 +73,7 @@ export default function Section({ id, eyebrow, title, highlight, intro, children
 
 // Shared surface for cards inside sections.
 export const card =
-  'rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm';
+  'rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/90 dark:bg-gray-800/80 shadow-sm';
 
 export function Chip({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'primary' }) {
   const styles =

@@ -153,7 +153,7 @@ export default function Contact() {
           </header>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm p-6 sm:p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-12 rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/90 dark:bg-gray-800/80 shadow-sm p-6 sm:p-8 md:p-12">
             
             {/* Contact Form */}
             <motion.div variants={formVariants}>

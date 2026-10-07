@@ -18,13 +18,13 @@ function Portrait() {
 
   return (
     <div ref={ref} className="relative">
-      <motion.div style={reduced ? { clipPath: 'inset(0 round 28px)' } : { clipPath }} className="overflow-hidden aspect-[4/5] bg-gray-200 dark:bg-gray-800">
+      <motion.div style={reduced ? { clipPath: 'inset(0 round 28px)' } : { clipPath }} className="overflow-hidden aspect-[3/4] bg-gray-900">
         <motion.img
-          src={`${import.meta.env.BASE_URL}asserts/about.jpg`}
+          src={`${import.meta.env.BASE_URL}asserts/about.webp`}
           alt={profile.name}
           loading="lazy"
           style={reduced ? undefined : { scale }}
-          className="w-full h-full object-cover object-[50%_25%]"
+          className="w-full h-full object-cover object-[50%_30%]"
         />
       </motion.div>
       <span className="absolute -bottom-3 left-6 font-mono text-[0.65rem] uppercase tracking-[0.2em] px-2.5 py-1 rounded-md bg-gray-900 text-white dark:bg-white dark:text-gray-900">

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
@@ -26,7 +26,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <>
       <Link to={`/projects/${project.id}`} data-cursor="View" className="block relative" aria-label={`${project.title} details`}>
         <SkeletonImage src={project.image} alt={project.title} className="w-full h-48" />
-        <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/55 text-white backdrop-blur-sm">
+        <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/65 text-white">
           {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
         </span>
       </Link>
@@ -115,8 +115,8 @@ function ProjectsFilmStrip() {
     };
   }, []);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  const progress = useSpring(scrollYProgress, { stiffness: 110, damping: 28, mass: 0.4 });
+  // Mapped directly from scroll so the strip moves 1:1 with the wheel.
+  const { scrollYProgress: progress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
   const x = useTransform(progress, [0, 1], [0, -distance]);
   const barScale = useTransform(progress, [0, 1], [0.04, 1]);
 
@@ -125,8 +125,8 @@ function ProjectsFilmStrip() {
       id="projects"
       ref={sectionRef}
       aria-labelledby="projects-title"
-      // Extra height sets the pace: the strip pans across 1.6x its travel distance for a slower camera move.
-      style={{ height: `calc(100vh + ${Math.round(distance * 1.6)}px)` }}
+      // Extra height equals the strip's travel, so one pixel of scroll pans the strip one pixel.
+      style={{ height: `calc(100vh + ${distance}px)` }}
       className={`relative ${bandClass}`}
     >
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center pt-20">
@@ -148,8 +148,8 @@ function ProjectsFilmStrip() {
           {projects.map((project, i) => (
             <motion.article
               key={project.id}
-              initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ y: -6 }}

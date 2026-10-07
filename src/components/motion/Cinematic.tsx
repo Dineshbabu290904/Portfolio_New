@@ -15,11 +15,6 @@ export function ScrollProgress() {
   );
 }
 
-// Very faint animated film grain over the whole page (static when reduced motion is on).
-export function FilmGrain() {
-  return <div aria-hidden="true" className="film-grain pointer-events-none fixed inset-0 z-[65]" />;
-}
-
 // Opening title sequence: letterbox bars, the name rising in, then the bars part to reveal the page.
 // Plays once per browser session on the home page and never when reduced motion is requested.
 export function IntroCurtain() {
