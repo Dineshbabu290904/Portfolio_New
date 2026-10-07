@@ -40,7 +40,7 @@ function App() {
       <ParticlesBackground />
       <Navigation />
 
-      <main id="main-content">
+      <main id="main-content" className="overflow-x-clip">
         {/* One scrolling page; each section also has its own URL (/about, /skills, ...).
             Rendered outside <Routes> so moving between sections never remounts it. */}
         {isSectionPath(pathname) ? (

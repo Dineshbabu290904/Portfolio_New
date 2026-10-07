@@ -31,7 +31,7 @@ export default function Hero() {
   const portraitY = useTransform(smoothY, [0, 700], [0, 120]);
   const portraitScale = useTransform(smoothY, [0, 700], [1, 0.92]);
   const copyY = useTransform(smoothY, [0, 700], [0, -60]);
-  const copyOpacity = useTransform(smoothY, [0, 500], [1, 0.2]);
+  const copyOpacity = useTransform(smoothY, [0, 700], [1, 0.6]);
 
   useEffect(() => {
     const reveal = setTimeout(() => setIsVisible(true), hold * 1000);
