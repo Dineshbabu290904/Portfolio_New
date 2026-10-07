@@ -24,8 +24,8 @@ export default function EnhancedNavigation() {
   const navItems = [
     { name: 'Home', icon: <Home size={20} />, description: 'Welcome to my portfolio', color: 'from-blue-500 to-indigo-600', route: '/' },
     { name: 'About', icon: <User size={20} />, description: 'Learn more about me', color: 'from-emerald-500 to-teal-600', route: '/about' },
-    { name: 'Skills', icon: <Award size={20} />, description: 'My technical expertise', color: 'from-amber-500 to-orange-600', route: '/skills' },
     { name: 'Experience', icon: <Briefcase size={20} />, description: 'My professional journey', color: 'from-purple-500 to-pink-600', route: '/experience' },
+    { name: 'Skills', icon: <Award size={20} />, description: 'My technical expertise', color: 'from-amber-500 to-orange-600', route: '/skills' },
     { name: 'Projects', icon: <Code size={20} />, description: 'My latest work', color: 'from-red-500 to-rose-600', route: '/projects' },
     { name: 'Contact', icon: <Mail size={20} />, description: 'Get in touch with me', color: 'from-cyan-500 to-blue-600', route: '/contact' },
     { name: 'Terminal', icon: <Terminal size={20} />, description: 'Access the CLI', color: 'from-gray-500 to-slate-600', route: '/terminal'},
@@ -113,11 +113,10 @@ export default function EnhancedNavigation() {
                     key={item.name}
                     to={item.route}
                     className={`relative flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-full transition-all duration-300 ${location.pathname === item.route
-                        ? `bg-gradient-to-r ${item.color} text-white shadow-md`
+                        ? 'bg-primary text-white dark:text-gray-900 shadow-sm'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-700/50'
                       }`}
                   >
-                    {item.icon}
                     <span>{item.name}</span>
                   </Link>
                 ))}
@@ -179,7 +178,7 @@ export default function EnhancedNavigation() {
           <div className="flex justify-around items-center max-w-md mx-auto">
             {navItems.slice(0, 6).map((item) => ( // Display first 5 items or adjust as needed
               <Link key={item.name} to={item.route} className="flex flex-col items-center justify-center w-1/5 p-1 group" aria-label={item.name} onClick={() => setIsOpen(false)}>
-                <div className={`p-2 rounded-full transition-all duration-200 group-hover:scale-110 ${location.pathname === item.route ? `bg-gradient-to-r ${item.color} text-white shadow-md` : 'text-gray-500 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-800'}`}>
+                <div className={`p-2 rounded-full transition-all duration-200 group-hover:scale-110 ${location.pathname === item.route ? 'bg-primary text-white dark:text-gray-900 shadow-sm' : 'text-gray-500 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-800'}`}>
                   {React.cloneElement(item.icon, { size: 22 })}
                 </div>
                 <span className={`text-xs mt-1 transition-colors duration-200 ${location.pathname === item.route ? 'font-semibold text-primary dark:text-secondary' : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'}`}>
@@ -212,7 +211,7 @@ export default function EnhancedNavigation() {
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Navigation</h3>
                 {navItems.map((item) => (
-                  <Link key={item.name} to={item.route} onClick={() => setIsOpen(false)} className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200 ${location.pathname === item.route ? `bg-gradient-to-r ${item.color} text-white shadow-sm` : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-800/70 hover:pl-4'}`}>
+                  <Link key={item.name} to={item.route} onClick={() => setIsOpen(false)} className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200 ${location.pathname === item.route ? 'bg-primary/10 text-primary dark:bg-primary/15 dark:text-primary-light font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-800/70 hover:pl-4'}`}>
                     <div className="flex items-center gap-3">
                       {React.cloneElement(item.icon, { size: 18 })}
                       <div>

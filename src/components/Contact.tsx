@@ -114,30 +114,28 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-gray-100 to-white dark:from-gray-800 dark:to-gray-900 transition-colors">
-      <div className="container mx-auto px-4">
+    <section id="contact" aria-labelledby="contact-title" className="scroll-mt-24 py-16 md:py-24">
+      <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          animate="visible"
           variants={containerVariants}
-          className="max-w-5xl mx-auto"
         >
           
-          {/* Page Header */}
-          <motion.div variants={titleVariants} className="mb-12">
-            
-            <motion.h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 text-center">
-              Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Touch</span>
-            </motion.h2>
-            <div className="h-1 w-20 bg-primary rounded mx-auto mb-6"></div>
-            <p className="text-gray-600 dark:text-gray-300 text-center mb-8 leading-relaxed">
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+          <motion.header variants={titleVariants} className="mb-10 md:mb-14 max-w-2xl">
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary dark:text-primary-light mb-3">
+              Contact
             </p>
-          </motion.div>
+            <h2 id="contact-title" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-[1.1]">
+              Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">talk</span>
+            </h2>
+            <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              Open to conversations about engineering, collaborations and interesting problems. Send a message or reach me directly.
+            </p>
+          </motion.header>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+          <div className="grid md:grid-cols-2 gap-12 rounded-2xl border border-gray-200/70 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm p-6 sm:p-8 md:p-12">
             
             {/* Contact Form */}
             <motion.div variants={formVariants}>
