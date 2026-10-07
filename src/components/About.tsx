@@ -12,12 +12,12 @@ import { Link as RouterLink } from 'react-router-dom';
 // Personal data (remains the same as your last provided version)
 const personalInfo = {
   name: "Dinesh Babu Surapaneni",
-  title: "Associate Software Developer at DAZN",
+  title: "Associate Software Engineer at DAZN India",
   location: "Vijayawada, AP, India",
-  availability: "Currently at DAZN",
+  availability: "Currently at DAZN India, Hyderabad",
   currentFocus: "Software Development at DAZN",
   profileImage: `${import.meta.env.BASE_URL}asserts/about.jpg`, // served from public/asserts
-  bio: "An Associate Software Developer at DAZN, the global sports streaming platform, with a background in Data Science from Vijayawada. I build reliable software, enjoy turning data into insights, and stay driven by curiosity and a love for lifelong learning.",
+  bio: "An Associate Software Engineer at DAZN India, the global sports streaming platform, with a B.Tech background in Computer Science Engineering (Data Science) from PVP Siddhartha Institute of Technology, Vijayawada. I build reliable software, enjoy turning data into insights, and stay driven by curiosity and a love for lifelong learning.",
   resumeUrl: "https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
 };
 
@@ -43,7 +43,7 @@ const coreCompetencies = [
 const education = [
   {
     id: "btech",
-    degree: "B.Tech in Computer Science & Engineering",
+    degree: "B.Tech in Computer Science Engineering (Data Science)",
     institution: "PVP Siddhartha Institute of Technology, Vijayawada",
     duration: "2022 - 2026 (Expected)",
     description: "Focus: Data Science, Machine Learning, Full Stack Development. CGPA: 8.5/10 (Current).",
@@ -531,6 +531,9 @@ export default function RedesignedAboutPage() {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {[
+                        { name: "Smart Coder", provider: "Smart Interviews" },
+                        { name: "BCG Data Science Job Simulation", provider: "Forage" },
+                        { name: "SQL (Basic)", provider: "HackerRank" },
                         { name: "Machine Learning Specialization", provider: "NPTEL" },
                         { name: "Data Science Professional Certificate", provider: "Google Cloud" },
                         { name: "Full Stack Web Development Bootcamp", provider: "Codegnan" },

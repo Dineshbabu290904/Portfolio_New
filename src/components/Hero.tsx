@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Zap, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const roles = ["Software Developer at DAZN", "Full-Stack Developer", "Data Scientist", "Problem Solver"];
+const roles = ["Software Engineer at DAZN", "Full-Stack Developer", "Data Scientist", "Problem Solver"];
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
@@ -86,7 +86,7 @@ export default function Hero() {
                 <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 animate-ping" />
                 <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-500" />
               </span>
-              Associate Software Developer at <span className="font-bold">DAZN</span>
+              Associate Software Engineer at <span className="font-bold">DAZN India</span>
             </motion.p>
             
             {/* Headline with highlighted text */}

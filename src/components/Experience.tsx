@@ -9,12 +9,20 @@ import PageHeader from './ui/PageHeader';
 // Timeline data
 const timelineData = [ // Renamed to avoid conflict with experiences 'timeline' component
   {
-    year: "Now",
-    title: "Associate Software Developer at DAZN",
-    detail: "Building software for DAZN, the global sports streaming platform.",
+    year: "2026",
+    title: "Intern to Associate Software Engineer at DAZN India",
+    detail: "Joined DAZN India in Hyderabad as a Software Developer Intern in January and converted to Associate Software Engineer in July, working on production features and critical fixes.",
     icon: <Briefcase className="w-5 h-5 text-white" />,
     color: "bg-amber-500",
     borderColor: "border-amber-500"
+  },
+  {
+    year: "2025",
+    title: "DSA Mentoring & Competitive Programming",
+    detail: "Earned the Smart Interviews Smart Coder certification, mentored juniors as a DSA Student Mentor, and reached a global rank of 6407 in TCS CodeVita Season 12.",
+    icon: <Award className="w-5 h-5 text-white" />,
+    color: "bg-teal-500",
+    borderColor: "border-teal-500"
   },
   {
     year: "2024",
@@ -44,17 +52,58 @@ const timelineData = [ // Renamed to avoid conflict with experiences 'timeline' 
 
 const experiencesData = [ // Renamed to avoid conflict
   {
-    // TODO(Dinesh): fill in start date, location, team, stack and bullet points.
-    company: 'DAZN',
-    role: 'Associate Software Developer',
-    duration: 'Present',
-    location: '',
-    description: 'Building and maintaining software for DAZN, the global sports streaming platform.',
-    responsibilities: [] as string[],
-    achievements: [] as string[],
+    company: 'DAZN India',
+    role: 'Associate Software Engineer',
+    duration: 'Jul 2026 - Present',
+    location: 'Hyderabad, India',
+    description: 'Building production features for DAZN, the global sports streaming platform, after converting from the internship to a full-time role.',
+    responsibilities: [
+      'Work on production features and critical fixes across services that serve millions of sports fans.',
+      'Apply caching, context propagation and system architecture practices to keep services scalable and reliable.',
+      'Debug real-world production issues by tracing how services communicate and how data flows through the system.',
+      'Collaborate across teams through code reviews, design discussions and knowledge-sharing sessions.'
+    ],
+    achievements: [
+      'Converted from Software Developer Intern to Associate Software Engineer after six months.'
+    ],
     technologies: [] as string[],
     featured: true,
     current: true
+  },
+  {
+    company: 'DAZN India',
+    role: 'Software Developer Intern',
+    duration: 'Jan 2026 - Jul 2026',
+    location: 'Hyderabad, Telangana, India',
+    description: 'Started in a production-scale engineering team, learning how large streaming systems are built, reviewed and operated.',
+    responsibilities: [
+      'Contributed to production features and fixes alongside senior engineers.',
+      'Learned business context, code review workflows and debugging in a production environment.',
+      'Gained hands-on experience with caching, context propagation and service architecture.'
+    ],
+    achievements: [] as string[],
+    technologies: [] as string[],
+    featured: true
+  },
+  {
+    company: 'Smart Interviews',
+    role: 'DSA Student Mentor',
+    duration: 'Mar 2025 - Jan 2026 · Part-time',
+    location: 'PVPSIT, Vijayawada',
+    description: 'Mentored aspiring software engineers in Data Structures and Algorithms, fostering problem-solving skills and algorithmic thinking.',
+    responsibilities: [
+      'Conducted weekly, in-depth mentoring sessions on advanced DSA topics.',
+      'Designed and curated coding challenges and comprehensive practice problem sets.',
+      'Provided constructive code reviews and actionable optimization strategies.',
+      'Organized and facilitated competitive programming contests to enhance practical skills.'
+    ],
+    achievements: [
+      'Guided 140+ students to successfully navigate and clear technical interviews at leading tech firms.',
+      'Developed a structured DSA curriculum that was subsequently adopted by the department.',
+      'Completed the Smart Coder program with a top rating in the batch (certified Feb 2025).'
+    ],
+    technologies: ['Data Structures', 'Algorithms', 'Problem Solving', 'Java', 'C++', 'Python', 'Competitive Programming'],
+    featured: true
   },
   {
     company: 'Eduskills (Google Virtual)',
@@ -73,25 +122,6 @@ const experiencesData = [ // Renamed to avoid conflict
       'Successfully completed all program modules and certification requirements with distinction.'
     ],
     technologies: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV', 'NLTK', 'Pandas', 'Python'],
-    featured: true
-  },
-  {
-    company: 'Smart Interviews',
-    role: 'Data Structures & Algorithms Mentor',
-    duration: 'Feb 2025 - Jun 2025 · Part-time',
-    location: 'PVPSIT, Vijayawada',
-    description: 'Mentored aspiring software engineers in Data Structures and Algorithms, fostering problem-solving skills and algorithmic thinking.',
-    responsibilities: [
-      'Conducted weekly, in-depth mentoring sessions on advanced DSA topics.',
-      'Designed and curated coding challenges and comprehensive practice problem sets.',
-      'Provided constructive code reviews and actionable optimization strategies.',
-      'Organized and facilitated competitive programming contests to enhance practical skills.'
-    ],
-    achievements: [
-      'Guided 140+ students to successfully navigate and clear technical interviews at leading tech firms.',
-      'Developed a structured DSA curriculum that was subsequently adopted by the department.'
-    ],
-    technologies: ['Data Structures', 'Algorithms', 'Problem Solving', 'Java', 'C++', 'Python', 'Competitive Programming'],
     featured: true
   },
   
@@ -337,7 +367,7 @@ export default function Experience() {
             eyebrowIcon={<Sparkles className="w-3.5 h-3.5" />}
             title="Professional"
             highlight="Experience"
-            subtitle="Currently an Associate Software Developer at DAZN. Here is the path that led there."
+            subtitle="Currently an Associate Software Engineer at DAZN India in Hyderabad. Here is the path that led there."
           />
           
           <motion.div 

@@ -28,7 +28,7 @@ export default function Footer() {
               <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 animate-ping" />
               <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-500" />
             </span>
-            Associate Software Developer at DAZN
+            Associate Software Engineer at DAZN India
           </p>
         </div>
 

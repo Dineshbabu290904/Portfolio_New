@@ -353,7 +353,7 @@ const CommandLineInterface: React.FC<CommandLineInterfaceProps> = ({
         response.content = (
           <div className="space-y-0.5">
             <p className={`font-semibold ${currentThemeConfig.primary}`}>Dinesh Babu Surapaneni</p>
-            <p>Associate Software Developer @ <span className={currentThemeConfig.accentColor}>DAZN</span></p>
+            <p>Associate Software Engineer @ <span className={currentThemeConfig.accentColor}>DAZN India</span>, Hyderabad</p>
             <p className={currentThemeConfig.secondaryText}>Full-stack development · Data science · Machine learning</p>
           </div>
         );

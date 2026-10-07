@@ -33,6 +33,9 @@ const skillsData: Record<SkillCategory, Skill[]> = {
   frameworksTools: [
     { name: 'React & Next.js', level: 'Advanced', description: 'Building interactive UIs, SPAs, and SSR applications with efficient state management.', years: 1, icon: <Layers />, color: "text-cyan-500", bgColor: "bg-cyan-500/10" },
     { name: 'Node.js & Express', level: 'Intermediate', description: 'Developing scalable RESTful APIs and backend services.', years: 1, icon: <Server />, color: "text-lime-500", bgColor: "bg-lime-500/10" },
+    { name: 'NestJS', level: 'Intermediate', description: 'Building structured, modular Node.js backend services with TypeScript.', icon: <Server />, color: "text-rose-500", bgColor: "bg-rose-500/10" },
+    { name: 'AWS (Lambda & IAM)', level: 'Intermediate', description: 'Working with serverless functions on AWS Lambda and access control with AWS IAM.', icon: <Workflow />, color: "text-orange-500", bgColor: "bg-orange-500/10" },
+    { name: 'Redux', level: 'Intermediate', description: 'Managing predictable application state in React applications.', icon: <Layers />, color: "text-violet-500", bgColor: "bg-violet-500/10" },
     { name: 'TensorFlow & Keras', level: 'Advanced', description: 'Designing, training, and deploying deep learning models for various AI tasks.', years: 2, icon: <Brain />, color: "text-orange-500", bgColor: "bg-orange-500/10" },
     { name: 'Scikit-learn', level: 'Advanced', description: 'Implementing classical machine learning algorithms and data preprocessing pipelines.', years: 2, icon: <PieChart />, color: "text-amber-500", bgColor: "bg-amber-500/10" },
     { name: 'Git & GitHub', level: 'Advanced', description: 'Proficient in version control, branching strategies, and collaborative workflows.', years: 1.5, icon: <GitBranch />, color: "text-slate-500", bgColor: "bg-slate-500/10" },
