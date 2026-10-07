@@ -32,10 +32,10 @@ export default function SkillsSection() {
     <>
       {/* Two big rows drifting in opposite directions; they speed up with the scroll */}
       <div aria-hidden="true" className="py-10 md:py-14 -rotate-2 select-none">
-        <Marquee baseVelocity={-1.6} className="py-2">
+        <Marquee baseVelocity={-0.5} className="py-2">
           <MarqueeRow items={rows[0]} />
         </Marquee>
-        <Marquee baseVelocity={1.6} className="py-2">
+        <Marquee baseVelocity={0.5} className="py-2">
           <MarqueeRow items={rows[1]} outline />
         </Marquee>
       </div>

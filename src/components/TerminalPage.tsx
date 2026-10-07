@@ -441,9 +441,9 @@ export default function TerminalPage() {
                   autoCapitalize="off"
                   spellCheck={false}
                   aria-label="Terminal command"
-                  className="w-full bg-transparent text-white caret-secondary focus:outline-none"
+                  className="w-full bg-transparent text-white caret-secondary focus:outline-none text-base sm:text-[inherit]"
                 />
-                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-600">type a command, Tab to complete</span>}
+                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-600 text-base sm:text-[inherit]">type a command, Tab to complete</span>}
               </span>
             </label>
           )}

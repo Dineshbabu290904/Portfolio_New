@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
@@ -115,8 +115,8 @@ function ProjectsFilmStrip() {
     };
   }, []);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  const progress = useSpring(scrollYProgress, { stiffness: 110, damping: 28, mass: 0.4 });
+  // Mapped directly from scroll so the strip moves 1:1 with the wheel.
+  const { scrollYProgress: progress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
   const x = useTransform(progress, [0, 1], [0, -distance]);
   const barScale = useTransform(progress, [0, 1], [0.04, 1]);
 
@@ -125,8 +125,8 @@ function ProjectsFilmStrip() {
       id="projects"
       ref={sectionRef}
       aria-labelledby="projects-title"
-      // Extra height sets the pace: the strip pans across 1.6x its travel distance for a slower camera move.
-      style={{ height: `calc(100vh + ${Math.round(distance * 1.6)}px)` }}
+      // Extra height equals the strip's travel, so one pixel of scroll pans the strip one pixel.
+      style={{ height: `calc(100vh + ${distance}px)` }}
       className={`relative ${bandClass}`}
     >
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center pt-20">
