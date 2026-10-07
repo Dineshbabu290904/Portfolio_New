@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
-  Github, ExternalLink, Zap, ArrowLeft, Code as CodeIcon, Tag, ListChecks, Star as StarIcon,
+  Github, ExternalLink, Zap, ArrowLeft, Tag, ListChecks, Star as StarIcon,
   CheckCircle, AlertTriangle, Layers, Share2, CalendarDays, Activity, Box, Palette, Briefcase, Cpu
 } from 'lucide-react'; // Added more icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,7 @@ import { faKaggle } from '@fortawesome/free-brands-svg-icons';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 // --- Static Project Data (Keep as is) ---
-const projectsData = [
+const projectsData: Project[] = [
   {
     id: "bone-fracture-detection",
     title: "Bone Fracture Detection System",
@@ -96,6 +96,7 @@ const projectsData = [
     category: "Web Development",
     date: "Jan 2024", // Example date, please update
     image: "https://cdn.prod.website-files.com/65fabbf8f7f7323a634a308c/66c478f331c8f9c5995f02ba_Group%201171275868.png", // Replace with a relevant CMS image or screenshot
+    shortDescription: "MERN-stack college management system with dedicated student, faculty, and admin portals.",
     description: "A comprehensive management system built with the MERN stack, providing dedicated portals for students, faculty, and administrators to streamline academic record management, attendance tracking, and institutional communication.",
     detailedInfo: {
       problemStatement: "Educational institutions often struggle with disparate systems for managing student information, faculty tasks, and administrative duties, leading to inefficiencies and communication breakdowns.",

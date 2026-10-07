@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu, X, Home, User, Briefcase, Code, Award, Mail,
-  ChevronRight, Star, Github, Linkedin, Twitter, ExternalLink,
-  Clock, ArrowRight, Download, Moon, Sun, Search, Terminal,
-  Activity
+  ChevronRight, Github, Linkedin,
+  ArrowRight, Download, Moon, Sun, Terminal
 } from 'lucide-react';
 
 export default function EnhancedNavigation() {

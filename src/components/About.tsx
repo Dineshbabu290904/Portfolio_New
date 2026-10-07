@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Briefcase, GraduationCap, Code,
-  Heart, Coffee, BookOpen, Lightbulb, Zap,
-  Users, Award, Sparkles, Brain, Activity, ExternalLink, FolderCode,
+  Heart, BookOpen, Lightbulb, Zap,
+  Users, Award, Sparkles, Brain, Activity, ExternalLink,
   Download,
   FolderArchiveIcon
 } from "lucide-react";
@@ -583,7 +583,7 @@ export default function RedesignedAboutPage() {
                     </h2>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {services.map((service, index) => (
+                    {services.map((service) => (
                       <motion.div
                         key={service.id}
                         variants={itemVariants}
@@ -640,7 +640,7 @@ export default function RedesignedAboutPage() {
           )}
         </AnimatePresence>
       </main>
-      <style jsx global>{`
+      <style>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }

@@ -6,17 +6,16 @@ import {
   Send, 
   Phone, 
   MapPin, 
-  Loader2, 
-  Twitter, 
-  Instagram 
+  Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
 // Replace with your own EmailJS credentials
-const YOUR_SERVICE_ID = 'service_sk1bx9g';
-const YOUR_TEMPLATE_ID = 'template_8sb1wgc';
-const YOUR_PUBLIC_KEY = '11AJ7mWGYb2j_LUhZ';
+// EmailJS config: override via VITE_EMAILJS_* env vars, falling back to the current account.
+const YOUR_SERVICE_ID: string = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? 'service_sk1bx9g';
+const YOUR_TEMPLATE_ID: string = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? 'template_8sb1wgc';
+const YOUR_PUBLIC_KEY: string = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '11AJ7mWGYb2j_LUhZ';
 
 export default function Contact() {
   // Form state

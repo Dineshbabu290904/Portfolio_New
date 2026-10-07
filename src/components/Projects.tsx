@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Code, Zap, BookOpen, Eye, ArrowRight } from 'lucide-react'; // Added Eye, ArrowRight
+import { Github, ExternalLink, Code, Zap, BookOpen, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKaggle } from '@fortawesome/free-brands-svg-icons';
@@ -29,25 +29,17 @@ const cardVariants = {
 
 
 function Projects() {
-  const [isVisible, setIsVisible] = useState(false); // For overall section visibility trigger if needed
-  // activeProject state is removed as direct link navigation is primary
-
-  useEffect(() => {
-    // This can be used if you want to trigger animations once the component is mounted,
-    // but whileInView on individual elements is often more effective for scroll-triggered animations.
-    setIsVisible(true); 
-  }, []);
 
   // Particles for background effect (assuming this component is used within a layout that has it)
   // Or, if you want particles specific to this section:
-  const particles = Array.from({ length: 12 }).map((_, i) => ({ // Reduced count for subtlety
+  const particles = useMemo(() => Array.from({ length: 12 }).map((_, i) => ({ // Reduced count for subtlety
     id: i,
     size: Math.random() * 3 + 1.5, // Smaller particles
     x: Math.random() * 100,
     y: Math.random() * 100,
     duration: Math.random() * 35 + 25, // Slower, more gentle movement
     delay: Math.random() * 3,
-  }));
+  })), []);
 
   const projects = [
     {

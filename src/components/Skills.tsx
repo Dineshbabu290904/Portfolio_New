@@ -1,13 +1,27 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   Code, Database, Brain, User, Users, Sparkles, Terminal, FileCode, Server, Layers,
-  GitBranch, BookOpen, Workflow, Cpu, PieChart, Network, MessageSquare, Medal, Landmark,
-  ChevronDown, ChevronUp, Zap, Star, CheckCircle, Briefcase, Lightbulb
+  GitBranch, BookOpen, Workflow, Cpu, PieChart, Network, MessageSquare,
+  Zap, Star, Briefcase, Lightbulb
 } from 'lucide-react';
+
+type SkillLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+
+interface Skill {
+  name: string;
+  level?: SkillLevel;
+  description: string;
+  years?: number;
+  icon: React.ReactElement;
+  color: string;
+  bgColor: string;
+}
+
+type SkillCategory = 'programmingLanguages' | 'frameworksTools' | 'databases' | 'specializations' | 'softSkills';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Using the data provided in your paste.txt file
-const skillsData = {
+const skillsData: Record<SkillCategory, Skill[]> = {
   programmingLanguages: [
     { name: 'Python', level: 'Advanced', description: 'Extensive experience in machine learning, data analysis, automation, and backend development with Django/Flask.', years: 3, icon: <Terminal />, color: "text-green-500", bgColor: "bg-green-500/10" },
     { name: 'JavaScript', level: 'Advanced', description: 'Proficient in ES6+, React, Node.js for building dynamic UIs and robust server-side applications.', years: 0.5, icon: <Code />, color: "text-yellow-500", bgColor: "bg-yellow-500/10"  },
@@ -45,7 +59,7 @@ const skillsData = {
   ]
 };
 
-const getDefaultSkillIcon = (categoryName: string) => {
+const getDefaultSkillIcon = (categoryName = 'default') => {
   switch (categoryName) {
     case 'programmingLanguages': return <Terminal size={20} />;
     case 'frameworksTools': return <Workflow size={20} />;
@@ -56,8 +70,8 @@ const getDefaultSkillIcon = (categoryName: string) => {
   }
 };
 
-const getCategoryDisplayInfo = (categoryName: string) => {
-  const info = {
+const getCategoryDisplayInfo = (categoryName: SkillCategory) => {
+  const info: Record<SkillCategory, { title: string; icon: React.ReactElement; color: string }> = {
     programmingLanguages: { title: 'Programming Languages', icon: <Terminal size={20} />, color: 'text-blue-500 dark:text-blue-400' },
     frameworksTools: { title: 'Frameworks & Tools', icon: <Workflow size={20} />, color: 'text-purple-500 dark:text-purple-400' },
     databases: { title: 'Databases', icon: <Database size={20} />, color: 'text-green-500 dark:text-green-400' },
@@ -67,8 +81,8 @@ const getCategoryDisplayInfo = (categoryName: string) => {
   return info[categoryName] || { title: categoryName, icon: <Code size={20} />, color: 'text-gray-500' };
 };
 
-const ProficiencyIndicator = ({ level }) => {
-  const levelMap = {
+const ProficiencyIndicator = ({ level }: { level: SkillLevel }) => {
+  const levelMap: Record<SkillLevel, { stars: number; color: string; label: string }> = {
     'Beginner': { stars: 2, color: 'text-amber-400', label: 'Beginner' },
     'Intermediate': { stars: 3, color: 'text-blue-400', label: 'Intermediate' },
     'Advanced': { stars: 4, color: 'text-green-400', label: 'Advanced' },
@@ -135,7 +149,9 @@ const BGShapes = () => {
 };
 
 // New compact skill card for the masonry layout
-const SkillCard = ({ skill, index, isActive, onExpand }) => {
+const SkillCard = ({ skill, index, isActive, onExpand }: {
+  skill: Skill; index: number; isActive: boolean; onExpand: (skill: Skill) => void;
+}) => {
   return (
     <motion.div
       layout
@@ -183,7 +199,9 @@ const SkillCard = ({ skill, index, isActive, onExpand }) => {
 };
 
 // Detailed skill modal
-const SkillDetailModal = ({ skill, isOpen, onClose }) => {
+const SkillDetailModal = ({ skill, isOpen, onClose }: {
+  skill: Skill | null; isOpen: boolean; onClose: () => void;
+}) => {
   if (!skill) return null;
   
   return (
@@ -251,7 +269,9 @@ const SkillDetailModal = ({ skill, isOpen, onClose }) => {
 };
 
 // Category tab with more stylish design
-const CategoryTab = ({ category, isActive, onClick }) => {
+const CategoryTab = ({ category, isActive, onClick }: {
+  category: SkillCategory; isActive: boolean; onClick: () => void;
+}) => {
   const catInfo = getCategoryDisplayInfo(category);
   
   return (
@@ -281,11 +301,11 @@ const CategoryTab = ({ category, isActive, onClick }) => {
 };
 
 export default function SkillsPage() {
-  const [activeCategory, setActiveCategory] = useState('programmingLanguages');
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [activeCategory, setActiveCategory] = useState<SkillCategory>('programmingLanguages');
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   
-  const categories = Object.keys(skillsData);
+  const categories = Object.keys(skillsData) as SkillCategory[];
   const currentSkills = skillsData[activeCategory] || [];
 
   useEffect(() => {
@@ -306,7 +326,7 @@ export default function SkillsPage() {
     }
   }, []);
   
-  const handleSkillClick = useCallback((skill: React.SetStateAction<null>) => {
+  const handleSkillClick = useCallback((skill: Skill) => {
     setSelectedSkill(skill);
     setModalOpen(true);
   }, []);
@@ -371,7 +391,7 @@ export default function SkillsPage() {
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-2">
                     <span>Advanced level</span>
                     <span className="font-medium">
-                      {currentSkills.filter((skill: { level: string; }) => skill.level === 'Advanced').length}
+                      {currentSkills.filter((skill) => skill.level === 'Advanced').length}
                     </span>
                   </div>
                 )}
@@ -405,12 +425,12 @@ export default function SkillsPage() {
                 layout
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5"
               >
-                {currentSkills.map((skill: { name: any; }, index: any) => (
+                {currentSkills.map((skill, index) => (
                   <SkillCard 
                     key={`${activeCategory}-${skill.name}`} 
                     skill={skill} 
                     index={index}
-                    isActive={selectedSkill && selectedSkill.name === skill.name}
+                    isActive={selectedSkill?.name === skill.name}
                     onExpand={handleSkillClick}
                   />
                 ))}

@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react'; // Removed useEffect as it wasn't used directly
+import React, { useState } from 'react';
 import { 
-  Calendar, MapPin, Briefcase, ChevronDown, ChevronUp, Award,
-  CheckCircle, Zap, Sparkles, GraduationCap, GitBranch, Monitor, Link as LinkIcon // Added LinkIcon for resume
+  Calendar, MapPin, Briefcase, ChevronDown, Award,
+  CheckCircle, Sparkles, GraduationCap, GitBranch, Monitor, Link as LinkIcon // Added LinkIcon for resume
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -98,7 +98,7 @@ const listItemFadeInUp = {
 };
 
 
-const ExperienceItem = ({ experience, isLast, index }: { /* Props type from previous version */
+const ExperienceItem = ({ experience, isLast }: { /* Props type from previous version */
   experience: {
     company: string; role: string; duration: string; location?: string; description: string;
     responsibilities: string[]; achievements?: string[]; technologies: string[]; featured?: boolean;
@@ -418,7 +418,7 @@ export default function Experience() {
             </motion.a>
         </motion.div>
       </div>
-      <style jsx global>{`
+      <style>{`
         /* Helper for primary color RGB value for shadow (can be set in global CSS or via JS) */
         /* :root { --color-primary-rgb: 59, 130, 246; } /* Example Blue */
 

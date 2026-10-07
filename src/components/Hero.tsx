@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight, Download, Code, Zap, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const roles = ["Data Scientist", "Software Developer", "ML Enthusiast", "Problem Solver"];
+
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTypingIndex, setActiveTypingIndex] = useState(0);
-  const roles = ["Data Scientist", "Software Developer", "ML Enthusiast", "Problem Solver"];
 
   useEffect(() => {
     setIsVisible(true);
@@ -20,13 +21,14 @@ export default function Hero() {
   }, []);
 
   // Particles for background effect
-  const particles = Array.from({ length: 20 }).map((_, i) => ({
+  // Memoized so particles don't jump to new positions every time the role text rotates
+  const particles = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
     id: i,
     size: Math.random() * 6 + 2,
     x: Math.random() * 100,
     y: Math.random() * 100,
     duration: Math.random() * 40 + 20
-  }));
+  })), []);
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0">
