@@ -178,9 +178,14 @@ code, kbd, samp, pre {
 /* Terminal: faint CRT scanlines and a soft vignette over the console screen */
 .terminal-screen {
   background-image:
+    repeating-linear-gradient(to bottom, rgb(15 23 42 / 0.025) 0px, rgb(15 23 42 / 0.025) 1px, transparent 1px, transparent 3px);
+}
+.dark .terminal-screen {
+  background-image:
     repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.025) 0px, rgb(255 255 255 / 0.025) 1px, transparent 1px, transparent 3px),
     radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.35) 100%);
   text-shadow: 0 0 6px rgb(var(--c-secondary) / 0.15);
 }
 .terminal-screen::-webkit-scrollbar { width: 6px; }
-.terminal-screen::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); border-radius: 9999px; }
+.terminal-screen::-webkit-scrollbar-thumb { background: rgb(15 23 42 / 0.15); border-radius: 9999px; }
+.dark .terminal-screen::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); }
