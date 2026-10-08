@@ -45,7 +45,7 @@ const boot = [
 ];
 
 function Accent({ children }: { children: ReactNode }) {
-  return <span className="text-secondary">{children}</span>;
+  return <span className="text-primary dark:text-secondary">{children}</span>;
 }
 
 function Dim({ children }: { children: ReactNode }) {
@@ -108,7 +108,7 @@ export default function TerminalPage() {
           <div className="grid gap-1 sm:grid-cols-[14rem_1fr]">
             {commandHelp.map(([c, d]) => (
               <div key={c} className="contents">
-                <button type="button" onClick={() => submit(c.split(' ')[0])} className="text-left text-secondary hover:underline">
+                <button type="button" onClick={() => submit(c.split(' ')[0])} className="text-left text-primary dark:text-secondary hover:underline">
                   {c}
                 </button>
                 <Dim>{d}</Dim>
@@ -125,7 +125,7 @@ export default function TerminalPage() {
               <p>
                 <Accent>{PROMPT}</Accent>
               </p>
-              <p className="text-gray-600">{'-'.repeat(PROMPT.length)}</p>
+              <p className="text-gray-400 dark:text-gray-600">{'-'.repeat(PROMPT.length)}</p>
               <dl className="grid grid-cols-[6rem_1fr] gap-x-2">
                 {[
                   ['name', profile.name],
@@ -136,7 +136,7 @@ export default function TerminalPage() {
                   ['degree', 'B.Tech CSE (Data Science), PVPSIT'],
                 ].map(([k, v]) => (
                   <div key={k} className="contents">
-                    <dt className="text-secondary">{k}</dt>
+                    <dt className="text-primary dark:text-secondary">{k}</dt>
                     <dd>{v}</dd>
                   </div>
                 ))}
@@ -158,12 +158,12 @@ export default function TerminalPage() {
             {experiences.map((job) => (
               <div key={job.role + job.company}>
                 <p>
-                  <Accent>{job.role}</Accent> @ {job.company} {job.current && <span className="text-emerald-400">● current</span>}
+                  <Accent>{job.role}</Accent> @ {job.company} {job.current && <span className="text-emerald-600 dark:text-emerald-400">● current</span>}
                 </p>
                 <Dim>{job.duration} · {job.location}</Dim>
                 <ul className="mt-1">
                   {job.points.slice(0, 3).map((p) => (
-                    <li key={p} className="text-gray-300">
+                    <li key={p} className="text-gray-700 dark:text-gray-300">
                       <Dim>›</Dim> {p}
                     </li>
                   ))}
@@ -178,7 +178,7 @@ export default function TerminalPage() {
             {skillGroups.map((g) => (
               <div key={g.title}>
                 <p><Accent>{g.title.toLowerCase().replace(/[^a-z]+/g, '_')}/</Accent></p>
-                <p className="text-gray-300">{g.skills.map((s) => s.name).join('  ')}</p>
+                <p className="text-gray-700 dark:text-gray-300">{g.skills.map((s) => s.name).join('  ')}</p>
               </div>
             ))}
           </div>
@@ -188,8 +188,8 @@ export default function TerminalPage() {
         return (
           <div className="space-y-1">
             {projects.map((p, i) => (
-              <button key={p.id} type="button" onClick={() => submit(`open ${i + 1}`)} className="block text-left hover:bg-white/5 rounded px-1 -mx-1">
-                <Dim>{String(i + 1).padStart(2, '0')}</Dim> <Accent>{p.id}</Accent> <span className="text-gray-300">{p.title}</span>{' '}
+              <button key={p.id} type="button" onClick={() => submit(`open ${i + 1}`)} className="block text-left hover:bg-gray-100 dark:hover:bg-white/5 rounded px-1 -mx-1">
+                <Dim>{String(i + 1).padStart(2, '0')}</Dim> <Accent>{p.id}</Accent> <span className="text-gray-700 dark:text-gray-300">{p.title}</span>{' '}
                 <Dim>[{p.technologies.slice(0, 3).join(', ')}]</Dim>
               </button>
             ))}
@@ -258,8 +258,8 @@ export default function TerminalPage() {
         if (arg.toLowerCase().replace(/\s+/g, '-') === 'hire-me') {
           return (
             <span>
-              <span className="text-emerald-400">[sudo] permission granted.</span> Drafting an email to {profile.name}…{' '}
-              <a className="underline text-secondary" href={`mailto:${profile.email}?subject=Let's%20talk`}>open it</a>
+              <span className="text-emerald-600 dark:text-emerald-400">[sudo] permission granted.</span> Drafting an email to {profile.name}…{' '}
+              <a className="underline text-primary dark:text-secondary" href={`mailto:${profile.email}?subject=Let's%20talk`}>open it</a>
             </span>
           );
         }
@@ -270,7 +270,7 @@ export default function TerminalPage() {
       default:
         return (
           <span className="text-red-400">
-            command not found: {cmd}. <Dim>Type</Dim> <button type="button" className="underline text-secondary" onClick={() => submit('help')}>help</button>
+            command not found: {cmd}. <Dim>Type</Dim> <button type="button" className="underline text-primary dark:text-secondary" onClick={() => submit('help')}>help</button>
           </span>
         );
     }
@@ -340,7 +340,7 @@ export default function TerminalPage() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-28 lg:pb-10 bg-gray-950 text-gray-200 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-28 lg:pb-10 bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200 overflow-hidden"
       onKeyDown={skipBoot}
       onClick={() => {
         skipBoot();
@@ -349,31 +349,31 @@ export default function TerminalPage() {
     >
       {/* Stage lighting */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-1/4 w-[40vw] h-[40vw] rounded-full bg-primary/30 blur-[120px]" />
-        <div className="absolute right-[20%] bottom-0 w-[35vw] h-[35vw] rounded-full bg-secondary/20 blur-[120px]" />
+        <div className="absolute left-1/4 top-1/4 w-[40vw] h-[40vw] opacity-20 dark:opacity-40" style={{ background: 'radial-gradient(circle closest-side, rgb(var(--c-primary)), transparent)' }} />
+        <div className="absolute right-[20%] bottom-0 w-[35vw] h-[35vw] opacity-20 dark:opacity-30" style={{ background: 'radial-gradient(circle closest-side, rgb(var(--c-secondary)), transparent)' }} />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.97, filter: 'blur(10px)' }}
         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-4xl rounded-2xl border border-white/10 bg-gray-900/70 backdrop-blur-xl shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] overflow-hidden"
+        className="relative w-full max-w-4xl rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/80 shadow-[0_40px_120px_-30px_rgba(15,23,42,0.25)] dark:shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] overflow-hidden"
       >
         {/* Title bar */}
-        <div className="flex items-center gap-3 px-4 h-11 border-b border-white/10 bg-white/[0.03]">
+        <div className="flex items-center gap-3 px-4 h-11 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.03]">
           <div className="flex gap-2">
             <button type="button" aria-label="Close terminal" onClick={() => navigate('/')} className="w-3 h-3 rounded-full bg-red-400 hover:bg-red-500" />
             <span aria-hidden="true" className="w-3 h-3 rounded-full bg-amber-400" />
             <span aria-hidden="true" className="w-3 h-3 rounded-full bg-emerald-400" />
           </div>
-          <p className="flex-1 text-center font-mono text-xs text-gray-400">{PROMPT}: ~</p>
+          <p className="flex-1 text-center font-mono text-xs text-gray-500 dark:text-gray-400">{PROMPT}: ~</p>
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               openPalette();
             }}
-            className="inline-flex items-center gap-1 font-mono text-[0.65rem] text-gray-400 hover:text-white border border-white/10 rounded px-1.5 py-0.5"
+            className="inline-flex items-center gap-1 font-mono text-[0.65rem] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-white/10 rounded px-1.5 py-0.5"
           >
             <Command size={11} /> K
           </button>
@@ -385,12 +385,12 @@ export default function TerminalPage() {
           className="terminal-screen relative h-[min(68vh,560px)] overflow-y-auto px-5 py-4 font-mono text-[0.82rem] leading-relaxed"
           aria-live="polite"
         >
-          <div className="space-y-0.5 text-gray-400">
+          <div className="space-y-0.5 text-gray-500 dark:text-gray-400">
             {boot.slice(0, booted ? boot.length : bootStep).map((l) => (
               <p key={l}>
                 {l.startsWith('[ ok ]') ? (
                   <>
-                    <span className="text-emerald-400">[ ok ]</span>
+                    <span className="text-emerald-600 dark:text-emerald-400">[ ok ]</span>
                     {l.slice(6)}
                   </>
                 ) : (
@@ -402,12 +402,12 @@ export default function TerminalPage() {
 
           {booted && (
             <div className="mt-4 mb-3">
-              <p className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-                Dinesh Babu<span className="text-secondary">.</span>
+              <p className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                Dinesh Babu<span className="text-primary dark:text-secondary">.</span>
               </p>
-              <p className="text-gray-400">
-                {profile.role} at {profile.company}. Type <button type="button" onClick={() => submit('help')} className="text-secondary underline">help</button> to look around, or try{' '}
-                <button type="button" onClick={() => submit('whoami')} className="text-secondary underline">whoami</button>.
+              <p className="text-gray-500 dark:text-gray-400">
+                {profile.role} at {profile.company}. Type <button type="button" onClick={() => submit('help')} className="text-primary dark:text-secondary underline">help</button> to look around, or try{' '}
+                <button type="button" onClick={() => submit('whoami')} className="text-primary dark:text-secondary underline">whoami</button>.
               </p>
             </div>
           )}
@@ -416,18 +416,18 @@ export default function TerminalPage() {
             <div key={line.id} className="mt-3">
               {line.input !== undefined && (
                 <p>
-                  <span className="text-emerald-400">{PROMPT}</span>
-                  <span className="text-gray-500">:~$</span> <span className="text-white">{line.input}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">{PROMPT}</span>
+                  <span className="text-gray-500">:~$</span> <span className="text-gray-900 dark:text-white">{line.input}</span>
                 </p>
               )}
-              {line.body && <div className="mt-1 text-gray-200">{line.body}</div>}
+              {line.body && <div className="mt-1 text-gray-800 dark:text-gray-200">{line.body}</div>}
             </div>
           ))}
 
           {booted && (
             <label className="mt-3 flex items-center gap-2">
               <span className="shrink-0">
-                <span className="text-emerald-400">{PROMPT}</span>
+                <span className="text-emerald-600 dark:text-emerald-400">{PROMPT}</span>
                 <span className="text-gray-500">:~$</span>
               </span>
               <span className="relative flex-1">
@@ -441,9 +441,9 @@ export default function TerminalPage() {
                   autoCapitalize="off"
                   spellCheck={false}
                   aria-label="Terminal command"
-                  className="w-full bg-transparent text-white caret-secondary focus:outline-none text-base sm:text-[inherit]"
+                  className="w-full bg-transparent text-gray-900 dark:text-white caret-primary dark:caret-secondary focus:outline-none text-base sm:[font-size:inherit]"
                 />
-                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-600 text-base sm:text-[inherit]">type a command, Tab to complete</span>}
+                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-400 dark:text-gray-600 text-base sm:[font-size:inherit]">type a command, Tab to complete</span>}
               </span>
             </label>
           )}
@@ -451,7 +451,7 @@ export default function TerminalPage() {
         </div>
 
         {/* Quick commands for touch users */}
-        <div className="flex gap-2 overflow-x-auto px-4 py-2.5 border-t border-white/10 bg-white/[0.02]">
+        <div className="flex gap-2 overflow-x-auto px-4 py-2.5 border-t border-gray-200 dark:border-white/10 bg-gray-50/80 dark:bg-white/[0.02]">
           {['whoami', 'experience', 'projects', 'skills', 'contact', 'help'].map((c) => (
             <button
               key={c}
@@ -461,7 +461,7 @@ export default function TerminalPage() {
                 skipBoot();
                 submit(c);
               }}
-              className="shrink-0 font-mono text-xs px-2.5 py-1 rounded-md border border-white/10 text-gray-300 hover:text-white hover:border-secondary/60 transition-colors"
+              className="shrink-0 font-mono text-xs px-2.5 py-1 rounded-md border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-primary/50 dark:hover:border-secondary/60 transition-colors"
             >
               {c}
             </button>
