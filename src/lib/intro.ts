@@ -4,7 +4,7 @@ const KEY = 'intro-played';
 let decision: boolean | null = null;
 
 /** Seconds the hero waits so its entrance starts as the intro curtain opens. */
-export const INTRO_HOLD = 1.7;
+export const INTRO_HOLD = 1.4;
 
 export function shouldPlayIntro(onHomePage: boolean): boolean {
   if (decision !== null) return decision;
@@ -20,6 +20,9 @@ export function shouldPlayIntro(onHomePage: boolean): boolean {
 }
 
 export function markIntroPlayed() {
+  // Later checks in this page load (e.g. the hero remounting when the reader returns to it)
+  // must not think the intro is still due.
+  decision = false;
   try {
     sessionStorage.setItem(KEY, '1');
   } catch {

@@ -73,7 +73,7 @@ export default function MobileNav() {
             : 'bg-transparent border-transparent'
         }`}
       >
-        <div className="mx-auto max-w-2xl h-14 px-3 flex items-center gap-2">
+        <div className="h-14 px-3 sm:px-4 flex items-center gap-2">
           <Link to="/" aria-label="Dinesh Babu, home" className="px-1 font-display font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">
             D<span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">B</span>
             <span className="text-secondary">.</span>
