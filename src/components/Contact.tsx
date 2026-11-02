@@ -10,18 +10,25 @@ import {
   FileText
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 import { Magnetic } from './motion/Atmosphere';
 import { ChapterNumber } from './motion/Scroll';
 import { SplitText } from './motion/Reveal';
+import { profile } from '../data/portfolio';
 
-// Replace with your own EmailJS credentials
-// EmailJS config: override via VITE_EMAILJS_* env vars, falling back to the current account.
-const YOUR_SERVICE_ID: string = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? 'service_sk1bx9g';
-const YOUR_TEMPLATE_ID: string = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? 'template_8sb1wgc';
-const YOUR_PUBLIC_KEY: string = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '11AJ7mWGYb2j_LUhZ';
+// Messages go through FormSubmit (https://formsubmit.co): free, no account and no API keys. It emails
+// each submission to the address below. The very first submission sends a one-time confirmation
+// email to that inbox; after it is confirmed, messages are delivered. If the service can't be
+// reached, the form falls back to opening the visitor's own email app with the message filled in.
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${profile.email}`;
 
-// The message form, shared by the desktop and mobile layouts. Sends through EmailJS.
+type Status = { success: boolean; message: string; mailto?: string } | null;
+
+const mailtoFor = (data: { name: string; email: string; subject: string; message: string }) =>
+  `mailto:${profile.email}?subject=${encodeURIComponent(data.subject || `Hello from ${data.name}`)}&body=${encodeURIComponent(
+    `${data.message}\n\n— ${data.name} (${data.email})`,
+  )}`;
+
+// The message form, shared by the desktop and mobile layouts.
 export function ContactForm({ compact = false }: { compact?: boolean }) {
   // Form state
   const [formData, setFormData] = useState({
@@ -30,12 +37,11 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     subject: '',
     message: '',
   });
-  
+  // Spam trap: hidden from people, filled in by bots.
+  const [honey, setHoney] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formStatus, setFormStatus] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  const [formStatus, setFormStatus] = useState<Status>(null);
 
   // Form handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -48,43 +54,39 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (honey) return; // a bot filled the hidden field
     setIsSubmitting(true);
-    
-    // Validate EmailJS configuration
-    if (!YOUR_SERVICE_ID || YOUR_SERVICE_ID === 'YOUR_SERVICE_ID' ||
-        !YOUR_TEMPLATE_ID || YOUR_TEMPLATE_ID === 'YOUR_TEMPLATE_ID' ||
-        !YOUR_PUBLIC_KEY || YOUR_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-      console.error('EmailJS configuration is missing. Please provide Service ID, Template ID, and Public Key.');
+    const mailto = mailtoFor(formData);
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _replyto: formData.email,
+          _subject: `Portfolio: ${formData.subject}`,
+          message: formData.message,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || String(result.success) !== 'true') throw new Error(result.message || `HTTP ${response.status}`);
+      setFormStatus({ success: true, message: "Thanks for your message! I'll get back to you soon." });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      // Offer the visitor's own email app with everything already written, so the message isn't lost.
       setFormStatus({
         success: false,
-        message: 'EmailJS configuration is missing. Please check console for details.'
+        message: "The message couldn't be sent from here.",
+        mailto,
       });
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    // Send email using EmailJS
-    emailjs.sendForm(YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, e.target as HTMLFormElement, YOUR_PUBLIC_KEY)
-      .then((result) => {
-        console.log('SUCCESS!', result.text);
-        setFormStatus({
-          success: true,
-          message: 'Thank you for your message! I\'ll get back to you soon.'
-        });
-        setFormData({ name: '', email: '', subject: '', message: '' }); // Clear form on success
-      })
-      .catch((error) => {
-        console.log('FAILED...', error.text);
-        setFormStatus({
-          success: false,
-          message: 'Failed to send message. Please try again later.'
-        });
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
   };
 
   return (
@@ -94,15 +96,33 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          role="status"
           className={`p-4 rounded-md ${
-            formStatus.success 
-              ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-300' 
-              : 'bg-red-100 text-red-800 dark:bg-red-800/20 dark:text-red-300'
+            formStatus.success
+              ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-300'
+              : 'bg-amber-50 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'
           }`}
         >
           {formStatus.message}
+          {formStatus.mailto && (
+            <>
+              {' '}
+              <a href={formStatus.mailto} className="font-semibold underline underline-offset-2">
+                Send it from your email app instead
+              </a>{' '}
+              or write to <a href={`mailto:${profile.email}`} className="underline underline-offset-2">{profile.email}</a>.
+            </>
+          )}
         </motion.div>
       )}
+
+      {/* Spam trap: visually hidden and skipped by keyboard and screen readers */}
+      <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+        <label>
+          Leave this empty
+          <input type="text" name="_honey" tabIndex={-1} autoComplete="off" value={honey} onChange={(e) => setHoney(e.target.value)} />
+        </label>
+      </div>
 
       {/* Name Field */}
       <div>
