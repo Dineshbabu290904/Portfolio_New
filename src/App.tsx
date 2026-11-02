@@ -35,7 +35,7 @@ function App() {
         Skip to content
       </a>
       <ScrollToTop />
-      {pathname === '/' && <IntroCurtain />}
+      <IntroCurtain />
       <ScrollProgress />
       {/* Ambient backdrop and custom cursor; navigation always visible */}
       <Aurora />

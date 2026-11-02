@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { markIntroPlayed, shouldPlayIntro } from '../../lib/intro';
 
@@ -16,15 +17,23 @@ export function ScrollProgress() {
 }
 
 // Opening title sequence: letterbox bars, the name rising in, then the bars part to reveal the page.
-// Plays once per browser session on the home page and never when reduced motion is requested.
+// Plays once per browser session, only when the visit starts on the home page, and never when
+// reduced motion is requested. It stays mounted for the whole visit, so navigating (or the scroll
+// spy changing the URL) can't interrupt it halfway or bring it back. Click or Escape skips it.
 export function IntroCurtain() {
-  const [show, setShow] = useState(() => shouldPlayIntro(true));
+  const { pathname } = useLocation();
+  const [show, setShow] = useState(() => shouldPlayIntro(pathname === '/'));
 
   useEffect(() => {
     if (!show) return;
     markIntroPlayed();
-    const timer = setTimeout(() => setShow(false), 1900);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => setShow(false), 1500);
+    const skip = (e: KeyboardEvent) => e.key === 'Escape' && setShow(false);
+    window.addEventListener('keydown', skip);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', skip);
+    };
   }, [show]);
 
   const ease = [0.76, 0, 0.24, 1] as const;
@@ -36,19 +45,19 @@ export function IntroCurtain() {
           key="intro"
           className="fixed inset-0 z-[80] flex items-center justify-center bg-gray-950"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, delay: 0.55 }}
+          transition={{ duration: 0.35, delay: 0.4 }}
           onClick={() => setShow(false)}
         >
           {/* Letterbox bars that slide away on exit */}
           <motion.div
             className="absolute inset-x-0 top-0 h-1/2 bg-black"
             exit={{ y: '-100%' }}
-            transition={{ duration: 0.9, ease }}
+            transition={{ duration: 0.75, ease }}
           />
           <motion.div
             className="absolute inset-x-0 bottom-0 h-1/2 bg-black"
             exit={{ y: '100%' }}
-            transition={{ duration: 0.9, ease }}
+            transition={{ duration: 0.75, ease }}
           />
 
           <div className="relative text-center px-6">
