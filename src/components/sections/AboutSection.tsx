@@ -17,7 +17,7 @@ function Portrait() {
   const scale = useTransform(scrollYProgress, [0, 1], [1.3, 1]);
 
   return (
-    <div ref={ref} className="relative w-full max-w-sm sm:max-w-md lg:max-w-none">
+    <div ref={ref} className="relative w-full max-w-sm sm:max-w-md md:max-w-none">
       <motion.div style={reduced ? { clipPath: 'inset(0 round 28px)' } : { clipPath }} className="overflow-hidden aspect-[3/4] bg-gray-900">
         <motion.img
           src={`${import.meta.env.BASE_URL}asserts/about.webp`}
@@ -39,9 +39,9 @@ export default function AboutSection() {
 
   return (
     <Section id="about" chapter="01" eyebrow="About" title="Engineer by trade," highlight="data nerd at heart">
-      <div className="grid gap-12 lg:gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      <div className="grid gap-12 md:gap-10 lg:gap-16 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* Left: portrait stays in frame while the story scrolls past */}
-        <div className="lg:sticky lg:top-28 self-start flex flex-col gap-8">
+        <div className="md:sticky md:top-20 lg:top-28 self-start flex flex-col gap-8">
           <Portrait />
           <div className="flex flex-col gap-1">
             <p className="font-display text-2xl font-extrabold text-gray-900 dark:text-white">{profile.name}</p>
@@ -106,7 +106,7 @@ export default function AboutSection() {
           </RevealGroup>
 
           {/* Credentials as hairline lists */}
-          <div className="grid gap-10 md:grid-cols-2">
+          <div className="grid gap-10 lg:grid-cols-2">
             <Reveal>
               <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-4">Education</h3>
               <ul className="divide-y divide-gray-300/70 dark:divide-gray-700 border-y border-gray-300/70 dark:border-gray-700">
