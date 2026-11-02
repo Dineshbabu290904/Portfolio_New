@@ -340,7 +340,7 @@ export default function TerminalPage() {
 
   return (
     <section
-      className="relative min-h-[calc(100svh-4.5rem)] lg:min-h-[100svh] flex items-start sm:items-center justify-center px-3 sm:px-4 pt-24 pb-4 sm:pb-10 bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200 overflow-hidden"
+      className="relative min-h-[calc(100svh-6rem)] lg:min-h-[100svh] flex items-start sm:items-center justify-center px-3 sm:px-4 pt-[4.5rem] sm:pt-24 pb-4 sm:pb-10 bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200 overflow-hidden"
       onKeyDown={skipBoot}
       onClick={() => {
         skipBoot();
@@ -383,7 +383,7 @@ export default function TerminalPage() {
         {/* Screen */}
         <div
           ref={scrollRef}
-          className="terminal-screen relative h-[calc(100svh-17rem)] min-h-[16rem] sm:h-[min(62vh,680px)] lg:h-[min(68vh,560px)] overflow-y-auto px-4 sm:px-5 py-4 font-mono text-[0.82rem] leading-relaxed"
+          className="terminal-screen relative h-[calc(100svh-16.5rem)] min-h-[16rem] sm:h-[min(62vh,680px)] lg:h-[min(68vh,560px)] overflow-y-auto px-4 sm:px-5 py-4 font-mono text-[0.82rem] leading-relaxed"
           aria-live="polite"
         >
           <div className="space-y-0.5 text-gray-500 dark:text-gray-400">

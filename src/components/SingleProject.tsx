@@ -60,11 +60,11 @@ export default function SingleProject() {
   return (
     <article key={project.id} className="relative">
       {/* Title block */}
-      <header className="container mx-auto px-4 max-w-6xl pt-28 md:pt-36 pb-10 md:pb-14">
+      <header className="container mx-auto px-4 max-w-6xl pt-20 sm:pt-28 md:pt-36 pb-10 md:pb-14">
         <Link
           to="/projects"
           viewTransition
-          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light transition-colors mb-10"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light transition-colors mb-6 sm:mb-10"
         >
           <ArrowLeft size={16} className="transition-transform duration-300 group-hover:-translate-x-1" /> All projects
         </Link>
