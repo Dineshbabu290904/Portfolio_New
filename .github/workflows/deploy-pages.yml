@@ -29,10 +29,22 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
 
+      # A <user>.github.io repository is served from the domain root; any other repository is
+      # served from /<repo>/. Pick the base path to match.
+      - name: Work out the site's base path
+        id: base
+        run: |
+          repo="${{ github.event.repository.name }}"
+          if [[ "${repo,,}" == "${{ github.repository_owner }}.github.io" || "${repo,,}" == *.github.io ]]; then
+            echo "path=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=/${repo}/" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build for GitHub Pages
         run: npm run build
         env:
-          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_BASE: ${{ steps.base.outputs.path }}
 
       # GitHub Pages has no SPA rewrites: serve the app for unknown paths so deep links work.
       - name: Add SPA fallback
