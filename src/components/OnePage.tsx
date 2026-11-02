@@ -8,6 +8,8 @@ import ProjectsSection from './sections/ProjectsSection';
 import Contact from './Contact';
 import { HeroStage, ScrollStatement } from './motion/Scroll';
 import { sections, sectionFromPath, sectionPath, type SectionId } from '../data/portfolio';
+import { useMediaQuery } from '../lib/useMediaQuery';
+import MobileHome from './mobile/MobileHome';
 
 interface ScrollState {
   fromScroll?: boolean;
@@ -22,6 +24,8 @@ export default function OnePage() {
   const activeRef = useRef<SectionId>(sectionFromPath(pathname));
   // While the page scrolls itself (nav click, deep link), ignore scroll-spy updates.
   const lockedUntil = useRef(0);
+  // Phones and tablets get their own layout (same sections and ids), designed for touch.
+  const desktop = useMediaQuery('(min-width: 1024px)');
 
   // Route -> scroll position (nav clicks, deep links)
   useEffect(() => {
@@ -76,6 +80,8 @@ export default function OnePage() {
       if (frame) cancelAnimationFrame(frame);
     };
   }, [navigate]);
+
+  if (!desktop) return <MobileHome />;
 
   return (
     <>

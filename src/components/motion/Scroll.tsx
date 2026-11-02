@@ -6,6 +6,7 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
+import { CINEMATIC_QUERY, useMediaQuery } from '../../lib/useMediaQuery';
 
 // Pins the hero briefly while the page scrolls past it and pulls the camera back:
 // the frame shrinks, rounds its corners and fades as the next scene arrives.
@@ -17,8 +18,10 @@ export function HeroStage({ children }: { children: ReactNode }) {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
   const radius = useTransform(scrollYProgress, [0, 1], [0, 40]);
   const opacity = useTransform(scrollYProgress, [0.2, 1], [1, 0]);
+  const cinematic = useMediaQuery(CINEMATIC_QUERY);
 
-  if (reduced) return <>{children}</>;
+  // Phones and tablets: no pin. The hero is taller than the screen there, and pinning would clip it.
+  if (reduced || !cinematic) return <>{children}</>;
 
   return (
     <div ref={ref} className="relative h-[125vh]">
@@ -65,6 +68,7 @@ export function ScrollStatement({
   const { scrollYProgress: progress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
   const words = segments.flatMap((s) => s.text.split(' ').filter(Boolean).map((w) => ({ w, className: s.className })));
   const text = segments.map((s) => s.text).join(' ');
+  const cinematic = useMediaQuery(CINEMATIC_QUERY);
 
   const statementClass =
     'font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.08] tracking-tight text-gray-900 dark:text-white max-w-5xl';
@@ -78,7 +82,8 @@ export function ScrollStatement({
   }
 
   return (
-    <section ref={ref} aria-label={eyebrow} className="relative h-[150vh]">
+    // A shorter pin on small screens so the statement doesn't cost several swipes.
+    <section ref={ref} aria-label={eyebrow} className={`relative ${cinematic ? 'h-[150vh]' : 'h-[115vh]'}`}>
       <div className="sticky top-0 h-screen flex items-center">
         <div className="container mx-auto px-4 max-w-6xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary dark:text-primary-light mb-6 flex items-center gap-3">

@@ -67,12 +67,12 @@ export default function Footer() {
       </div>
       <div className="border-t border-gray-200/70 dark:border-gray-800">
         <div className="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs text-gray-500 dark:text-gray-500 font-mono">
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
             © {new Date().getFullYear()} Dinesh Babu Surapaneni · Built with React, TypeScript &amp; Tailwind CSS
           </p>
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500 hover:text-primary dark:hover:text-primary-light transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-light transition-colors"
           >
             <ArrowUp size={14} /> Back to top
           </Link>

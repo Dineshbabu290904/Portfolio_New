@@ -184,13 +184,22 @@ export interface Project {
   id: string;
   title: string;
   category: string;
+  year: string;
   summary: string;
   technologies: string[];
   highlights: string[];
-  image: string;
   githubUrl?: string;
   kaggleUrl?: string;
   demoUrl?: string;
+  /** Long-form case study shown on the project page. */
+  caseStudy: {
+    overview: string;
+    problem: string;
+    solution: string;
+    features: string[];
+    challenges: string;
+    learnings: string;
+  };
 }
 
 export const projects: Project[] = [
@@ -198,42 +207,117 @@ export const projects: Project[] = [
     id: 'cms',
     title: 'College Management System',
     category: 'Full-stack web',
+    year: '2024',
     summary: 'MERN-stack platform with separate student, faculty and admin portals for academic records, attendance and communication.',
     technologies: ['MongoDB', 'Express.js', 'React', 'Node.js', 'JWT'],
     highlights: ['Role-based access', 'Multi-portal'],
-    image: 'https://cdn.prod.website-files.com/65fabbf8f7f7323a634a308c/66c478f331c8f9c5995f02ba_Group%201171275868.png',
     githubUrl: 'https://github.com/Dineshbabu290904/CMS-Backend',
     demoUrl: 'https://dineshcms.vercel.app',
+    caseStudy: {
+      overview:
+        'A management system built on the MERN stack, with dedicated portals for students, faculty and administrators to streamline academic records, attendance tracking and institutional communication.',
+      problem:
+        'Institutions often juggle separate systems for student information, faculty tasks and administration, which leads to inefficiency and communication gaps.',
+      solution:
+        'A MongoDB, Express, React and Node.js application with role-based access control. Students see grades and attendance, faculty manage courses and assignments, and admins oversee users and system settings.',
+      features: [
+        'Role-based dashboards for students, faculty and admins.',
+        'Secure authentication with JSON Web Tokens.',
+        'Student module: profile, courses, grades and attendance.',
+        'Faculty module: courses, materials, attendance and grading.',
+        'Admin module: user management, course creation and configuration.',
+        'RESTful API backend with Express.js and MongoDB.',
+      ],
+      challenges:
+        'Implementing robust role-based access control, designing clear interfaces for three very different user types, keeping data secure, and modelling complex relationships in MongoDB.',
+      learnings:
+        'End-to-end MERN development, API design and integration, secure authentication practices, NoSQL data modelling, React state management and client-side routing.',
+    },
   },
   {
     id: 'bone-fracture-detection',
     title: 'Bone Fracture Detection',
     category: 'Machine learning',
+    year: '2023',
     summary: 'Deep learning model that detects bone fractures in X-ray images using a CNN, reaching 92% accuracy on the test set.',
     technologies: ['Python', 'TensorFlow', 'OpenCV', 'Scikit-learn'],
     highlights: ['92% accuracy', 'Medical imaging'],
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=500&fit=crop&q=80&auto=format',
     kaggleUrl: 'https://www.kaggle.com/code/dineshbabusurapaneni/machine-learning-capstone-one-fracture',
+    caseStudy: {
+      overview:
+        'A convolutional neural network that classifies X-ray images as fractured or not fractured, built to give clinicians a fast preliminary read. It reached 92% accuracy on an unseen test set.',
+      problem:
+        'Radiologists carry heavy workloads, and fatigue can lead to missed findings. An automated model can act as a second opinion or help triage critical cases.',
+      solution:
+        'A ResNet-inspired CNN trained to classify fractured versus non-fractured images. Augmentation (rotation, zoom, flips, brightness) expanded the dataset and made the model robust to variations in image quality.',
+      features: [
+        '92% accuracy on the unseen test set.',
+        'CNN architecture tuned for medical imaging.',
+        'Preprocessing pipeline with normalization and augmentation.',
+        'Prediction visualisations that highlight areas of interest (Grad-CAM).',
+      ],
+      challenges:
+        'Sourcing a large, well-annotated dataset, handling class imbalance, keeping the model interpretable for medical use, and keeping inference efficient.',
+      learnings:
+        'CNN architectures in depth, medical image processing, TensorFlow and Keras, and evaluating models beyond accuracy with precision, recall and F1 on imbalanced data.',
+    },
   },
   {
     id: 'digimart',
     title: 'DigiMart',
     category: 'Full-stack web',
+    year: '2023',
     summary: 'E-commerce platform that connects farmers directly with buyers, with real-time pricing and demand analysis.',
     technologies: ['Java', 'Servlets', 'JSP', 'MySQL', 'JavaScript'],
     highlights: ['Real-time pricing', 'Direct trade'],
-    image: 'https://builtin.com/sites/www.builtin.com/files/styles/og/public/2022-09/ecommerce.png',
     githubUrl: 'https://github.com/Dineshbabu290904/DigiMart',
+    caseStudy: {
+      overview:
+        'A full-stack marketplace that connects farmers directly with buyers. It offers transparent, real-time produce pricing, demand aggregation and direct communication to cut out intermediaries.',
+      problem:
+        'Farmers often lack direct market access and live price information, so they rely on intermediaries and lose margin. Buyers struggle to source fresh produce reliably from the source.',
+      solution:
+        'Java Servlets and JSP for the business logic and dynamic pages, HTML, CSS and JavaScript on the front end, and MySQL for users, listings, orders and transactions, following an MVC structure.',
+      features: [
+        'Separate portals for farmers and buyers with role-specific tools.',
+        'Secure authentication, authorization and session management.',
+        'Product catalogue with descriptions, media and pricing.',
+        'Order flow from cart to (simulated) payment and confirmation.',
+        'Admin panel for users, listings and platform analytics.',
+      ],
+      challenges:
+        'Keeping data consistent across a relational schema, designing for many users and listings, and building a clear experience for very different user groups.',
+      learnings:
+        'The full web development lifecycle, Java web technologies (Servlets, JSP, JSTL), relational design and SQL with MySQL, and the MVC pattern.',
+    },
   },
   {
     id: 'data-analytics-dashboard',
     title: 'Interactive Analytics Dashboard',
     category: 'Data visualization',
+    year: '2022',
     summary: 'Dashboard for exploring complex datasets with customizable views, filters and live-updating charts.',
     technologies: ['React', 'Node.js', 'MongoDB', 'D3.js'],
     highlights: ['Interactive charts', 'Live updates'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop&q=80&auto=format',
     githubUrl: 'https://github.com/Dineshbabu290904/data-analytics-dashboard-example',
+    caseStudy: {
+      overview:
+        'An interactive dashboard for exploring datasets: upload a CSV, explore it through dynamic charts, apply filters and draw insights through a responsive interface.',
+      problem:
+        'Static reports and spreadsheets make it hard to explore data and spot patterns. Interactive dashboards let people engage with their data directly.',
+      solution:
+        'A React single-page app backed by a Node.js and Express API, with D3.js for custom visualisations and MongoDB for dashboard configurations and dataset metadata.',
+      features: [
+        'CSV upload with client- and server-side parsing.',
+        'Interactive bar, line, pie, scatter and heatmap charts.',
+        'Filtering, sorting and drill-down across dimensions.',
+        'Groundwork for live updates over WebSockets.',
+      ],
+      challenges:
+        'Rendering large datasets in the browser without slowing down, keeping visualisations responsive across browsers, and making complex interactions discoverable.',
+      learnings:
+        'Advanced React patterns, building REST APIs with Express, D3.js visualisation techniques, MongoDB data modelling and state management in a feature-rich SPA.',
+    },
   },
 ];
 

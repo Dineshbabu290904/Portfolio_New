@@ -17,7 +17,7 @@ function Portrait() {
   const scale = useTransform(scrollYProgress, [0, 1], [1.3, 1]);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative w-full max-w-sm sm:max-w-md lg:max-w-none">
       <motion.div style={reduced ? { clipPath: 'inset(0 round 28px)' } : { clipPath }} className="overflow-hidden aspect-[3/4] bg-gray-900">
         <motion.img
           src={`${import.meta.env.BASE_URL}asserts/about.webp`}
@@ -82,7 +82,7 @@ export default function AboutSection() {
           ))}
 
           <Reveal>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 mb-3">Off the clock</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-3">Off the clock</p>
             <p className="text-lg text-gray-800 dark:text-gray-200 leading-relaxed">
               {profile.interests.map((interest, i) => (
                 <span key={interest}>
@@ -108,13 +108,13 @@ export default function AboutSection() {
           {/* Credentials as hairline lists */}
           <div className="grid gap-10 md:grid-cols-2">
             <Reveal>
-              <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 mb-4">Education</h3>
+              <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-4">Education</h3>
               <ul className="divide-y divide-gray-300/70 dark:divide-gray-700 border-y border-gray-300/70 dark:border-gray-700">
                 {education.map((item) => (
                   <li key={item.degree} className="py-4">
                     <p className="font-semibold text-gray-900 dark:text-white">{item.degree}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{item.institution}</p>
-                    <p className="font-mono text-xs text-gray-500 mt-1 tabular-nums">
+                    <p className="font-mono text-xs text-gray-500 dark:text-gray-400 mt-1 tabular-nums">
                       {item.duration}
                       {item.note && ` · ${item.note}`}
                     </p>
@@ -123,7 +123,7 @@ export default function AboutSection() {
               </ul>
             </Reveal>
             <Reveal delay={0.1}>
-              <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 mb-4">Certifications</h3>
+              <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-4">Certifications</h3>
               <ul className="divide-y divide-gray-300/70 dark:divide-gray-700 border-y border-gray-300/70 dark:border-gray-700">
                 {certifications.map((cert) => (
                   <li key={cert.name} className="py-4 flex items-baseline justify-between gap-4">
@@ -131,7 +131,7 @@ export default function AboutSection() {
                       <span className="block font-semibold text-gray-900 dark:text-white">{cert.name}</span>
                       <span className="block text-sm text-gray-500 dark:text-gray-400">{cert.issuer}</span>
                     </span>
-                    <span className="font-mono text-xs text-gray-500 tabular-nums shrink-0">{cert.year}</span>
+                    <span className="font-mono text-xs text-gray-500 dark:text-gray-400 tabular-nums shrink-0">{cert.year}</span>
                   </li>
                 ))}
               </ul>
