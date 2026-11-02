@@ -1,22 +1,87 @@
-import { useState, useEffect, useMemo, useRef, type MouseEvent } from 'react';
-import { motion, AnimatePresence, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { motion, AnimatePresence, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Briefcase, Code, Download, Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { SplitText } from './motion/Reveal';
 import { Magnetic } from './motion/Atmosphere';
 import { INTRO_HOLD, shouldPlayIntro } from '../lib/intro';
-import { Github, Linkedin, Mail, ArrowRight, Download, Code, Briefcase, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { profile } from '../data/portfolio';
 
-const roles = ["Software Engineer at DAZN", "Full-Stack Developer", "Data Scientist", "Problem Solver"];
+const roles = ['Software Engineer at DAZN', 'Full-Stack Developer', 'Data Scientist', 'Problem Solver'];
+const ease = [0.16, 1, 0.3, 1] as const;
+
+// Portrait as a live broadcast: signal rings radiate from it, a thin light ring orbits it, and a
+// small "on air" card with a live equaliser floats beside it. A nod to building software for live sport.
+function BroadcastPortrait({ visible }: { visible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.92 }}
+      transition={{ duration: 1.1, delay: 0.3, ease }}
+      className="relative w-60 h-60 sm:w-72 sm:h-72 lg:w-[22rem] lg:h-[22rem]"
+    >
+      {/* Signal rings */}
+      <div aria-hidden="true" className="absolute inset-0">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="hero-signal absolute inset-0 rounded-full border border-secondary/50" style={{ animationDelay: `${i * 1.2}s` }} />
+        ))}
+      </div>
+      {/* Orbiting light ring */}
+      <div aria-hidden="true" className="hero-orbit absolute -inset-3 rounded-full" />
+      {/* Portrait */}
+      <div className="absolute inset-0 rounded-full overflow-hidden border-[6px] border-white dark:border-gray-900 shadow-2xl shadow-primary/25 bg-gray-200 dark:bg-gray-800">
+        <img
+          src={`${import.meta.env.BASE_URL}asserts/profile.jpg`}
+          alt={`Portrait of ${profile.name}`}
+          width={352}
+          height={352}
+          fetchPriority="high"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      {/* On-air card */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 16 }}
+        transition={{ duration: 0.7, delay: 1.0, ease }}
+        className="absolute -left-4 sm:-left-10 bottom-4 sm:bottom-8"
+      >
+        <div className="hero-float flex items-center gap-3 rounded-2xl bg-white dark:bg-gray-900 shadow-xl ring-1 ring-black/5 dark:ring-white/10 pl-3 pr-4 py-2.5">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-red-600 px-1.5 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider text-white">
+            <span className="hero-live-dot w-1.5 h-1.5 rounded-full bg-white" /> Live
+          </span>
+          <span aria-hidden="true" className="flex items-end gap-[3px] h-4">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span key={i} className="hero-eq w-[3px] h-full rounded-full bg-gradient-to-t from-primary to-secondary" style={{ animationDelay: `${i * -0.22}s` }} />
+            ))}
+          </span>
+          <span className="text-xs font-semibold text-gray-800 dark:text-gray-100 whitespace-nowrap">Building for DAZN</span>
+        </div>
+      </motion.div>
+      {/* Stack card */}
+      <motion.div
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : -16 }}
+        transition={{ duration: 0.7, delay: 1.15, ease }}
+        className="absolute -right-2 sm:-right-6 top-6"
+      >
+        <div className="hero-float hero-float-alt rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xl px-3 py-2 font-mono text-[0.7rem] font-semibold">
+          {'</>'} full-stack · ml
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeTypingIndex, setActiveTypingIndex] = useState(0);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const reduced = useReducedMotion();
   // When the opening title sequence plays, hold the hero entrance until the curtain parts.
   const [hold] = useState(() => (shouldPlayIntro(false) ? INTRO_HOLD : 0));
 
-  // Cursor spotlight: a soft light that follows the pointer across the hero.
+  // Cursor spotlight: a fixed-size glow moved with transforms (cheap), following the pointer.
   const sectionRef = useRef<HTMLElement>(null);
-  // A fixed-size glow moved with transforms (cheap), rather than repainting a full-hero gradient.
   const spotX = useSpring(useMotionValue(-1000), { stiffness: 200, damping: 30 });
   const spotY = useSpring(useMotionValue(-1000), { stiffness: 200, damping: 30 });
   const handlePointer = (e: MouseEvent<HTMLElement>) => {
@@ -26,388 +91,153 @@ export default function Hero() {
     spotY.set(e.clientY - rect.top - 260);
   };
 
-  // Parallax: as the page scrolls away, the portrait drifts and the copy lifts and fades like a camera pull-back.
+  // Parallax as the page scrolls away: the portrait drifts down while the copy lifts.
   const { scrollY } = useScroll();
-  // Mapped straight from scroll (no spring), so the parallax tracks the wheel without lag.
-  const portraitY = useTransform(scrollY, [0, 700], [0, 80]);
-  const portraitScale = useTransform(scrollY, [0, 700], [1, 0.94]);
+  const portraitY = useTransform(scrollY, [0, 700], [0, 70]);
   const copyY = useTransform(scrollY, [0, 700], [0, -40]);
-  const copyOpacity = useTransform(scrollY, [0, 700], [1, 0.7]);
 
   useEffect(() => {
     const reveal = setTimeout(() => setIsVisible(true), hold * 1000);
-    
-    // Set up typing animation interval
-    const typingInterval = setInterval(() => {
-      setActiveTypingIndex((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    
+    const rotate = reduced ? undefined : setInterval(() => setRoleIndex((i) => (i + 1) % roles.length), 2800);
     return () => {
       clearTimeout(reveal);
-      clearInterval(typingInterval);
+      if (rotate) clearInterval(rotate);
     };
-  }, [hold]);
+  }, [hold, reduced]);
 
-  // Particles for background effect
-  // Memoized so particles don't jump to new positions every time the role text rotates
-  const particles = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
-    id: i,
-    size: Math.random() * 6 + 2,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    duration: Math.random() * 40 + 20
-  })), []);
+  const enter = (delay: number) => ({
+    initial: { opacity: 0, y: 18 },
+    animate: { opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 18 },
+    transition: { duration: 0.7, delay, ease },
+  });
 
   return (
     <section
       id="home"
       ref={sectionRef}
       onMouseMove={handlePointer}
-      className="min-h-screen relative overflow-hidden flex items-center py-16 md:py-0"
+      className="relative overflow-hidden min-h-[100svh] flex items-center pt-28 pb-16 lg:py-0"
     >
-      {/* Cursor spotlight */}
       <motion.div
         aria-hidden="true"
         style={{ x: spotX, y: spotY }}
         className="pointer-events-none absolute left-0 top-0 hidden md:block w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgb(var(--c-secondary)/0.16),transparent_70%)] will-change-transform"
       />
-      {/* Enhanced Background with animated gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 dark:from-primary/20 dark:via-secondary/10 dark:to-primary/20 animate-gradient-shift [mask-image:linear-gradient(to_bottom,black_65%,transparent)]" />
-      
-      {/* Particle Background Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="absolute rounded-full bg-primary/20 dark:bg-primary/30"
-            style={{
-              width: particle.size,
-              height: particle.size,
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-            }}
-            animate={{
-              y: ["0%", "100%"],
-              opacity: [0, 0.8, 0],
-            }}
-            transition={{
-              y: {
-                duration: particle.duration,
-                repeat: Infinity,
-                ease: "linear",
-              },
-              opacity: {
-                duration: particle.duration,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }
-            }}
-          />
-        ))}
-      </div>
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 dark:from-primary/20 dark:to-secondary/10 [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
+      />
 
-      <div className="container mx-auto px-4 z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-16">
-          {/* Text Content - Enhanced with staggered animations */}
-          <motion.div style={{ y: copyY, opacity: copyOpacity }} className="md:w-1/2 text-center md:text-left">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVisible ? 1 : 0 }}
-          >
-            {/* Pre-headline tag - New addition */}
+      <div className="relative container mx-auto px-4 max-w-6xl">
+        <div className="grid items-center gap-14 lg:gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <motion.div style={reduced ? undefined : { y: copyY }} className="min-w-0">
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-block mb-3 px-4 py-1 rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium text-sm"
+              {...enter(0.05)}
+              className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full border border-primary/15 bg-primary/5 dark:bg-primary/15 text-sm font-medium text-primary dark:text-primary-light"
             >
-              <span className="relative inline-flex w-2 h-2 mr-2 mb-0.5 align-middle">
-                <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 animate-ping" />
+              <span className="relative inline-flex w-2 h-2">
+                <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-500 opacity-75 motion-safe:animate-ping" />
                 <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-500" />
               </span>
-              Associate Software Engineer at <span className="font-bold">DAZN India</span>
+              <span>
+                {profile.role} at <span className="font-bold">{profile.company}</span>
+              </span>
             </motion.p>
-            
-            {/* Headline with highlighted text */}
+
             <SplitText
               as="h1"
               onMount
-              delay={hold + 0.2}
-              className="text-5xl md:text-7xl font-extrabold text-gray-800 dark:text-white mb-4 leading-tight"
+              delay={hold + 0.15}
+              className="font-display text-5xl sm:text-7xl xl:text-8xl font-extrabold tracking-tight leading-[0.95] text-gray-900 dark:text-white"
               segments={[
                 { text: 'Dinesh Babu' },
                 { text: 'Surapaneni', className: 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary' },
               ]}
             />
-            
-            {/* Typewriter effect for roles */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="min-h-[2.5rem] mb-6"
-            >
-              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 flex flex-wrap items-baseline justify-center md:justify-start gap-x-2">
-                <span className="whitespace-nowrap">I'm a</span>
-                <AnimatePresence mode="wait">
+
+            {/* Rotating role: each title rolls up through a masked slot */}
+            <motion.p {...enter(0.45)} className="mt-6 text-xl sm:text-2xl text-gray-600 dark:text-gray-300 flex flex-wrap items-baseline gap-x-2">
+              <span>I'm a</span>
+              <span className="relative inline-grid overflow-hidden h-[1.35em] leading-[1.35]" aria-live="polite">
+                <AnimatePresence mode="popLayout" initial={false}>
                   <motion.span
-                    key={activeTypingIndex}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={{ duration: 0.3 }}
-                    className="font-semibold text-primary"
+                    key={roleIndex}
+                    initial={{ y: '100%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    exit={{ y: '-100%', opacity: 0 }}
+                    transition={{ duration: 0.5, ease }}
+                    className="block font-semibold leading-[1.35] text-primary dark:text-primary-light whitespace-nowrap"
                   >
-                    {roles[activeTypingIndex]}
+                    {roles[roleIndex]}
                   </motion.span>
                 </AnimatePresence>
-                <motion.span 
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="ml-1 font-bold text-primary"
-                >
-                  |
-                </motion.span>
-              </p>
-            </motion.div>
-
-            {/* Brief bio - New addition */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-lg mx-auto md:mx-0"
-            >
-              Building software for DAZN, the global sports streaming platform.
-              I enjoy turning data into insights and code into solutions, from full-stack web apps to machine learning.
+              </span>
             </motion.p>
 
-            {/* Call-to-action buttons/links - Enhanced with hover effects */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-              className="flex flex-wrap justify-center md:justify-start gap-4 mb-8"
-            >
-              {/* Primary CTA - View Projects (magnetic) */}
-              <Magnetic>
-              <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(var(--color-primary-rgb), 0.4)" }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
-              >
-                <Link to={`/projects/`} className="flex items-center">
-                  View Projects <ArrowRight className="ml-2 w-5 h-5"/>
-                </Link>
-              </motion.div>
-              </Magnetic>
+            <motion.p {...enter(0.55)} className="mt-5 text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-300 max-w-xl">
+              Building software for DAZN, the global sports streaming platform. I enjoy turning data into insights and code into
+              solutions, from full-stack web apps to machine learning.
+            </motion.p>
 
-              {/* Secondary CTA - Resume Download */}
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="https://drive.google.com/file/d/1YVFvsOYMxXpIjebbppfKYDIlXDz0ZhtT/view"
+            <motion.div {...enter(0.65)} className="mt-9 flex flex-wrap items-center gap-3 sm:gap-4">
+              <Magnetic>
+                <Link
+                  to="/projects"
+                  className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-gray-900 text-white dark:bg-white dark:text-gray-900 font-semibold shadow-lg shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                >
+                  View projects
+                  <span className="grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-primary to-secondary text-white transition-transform duration-500 group-hover:-rotate-45">
+                    <ArrowRight size={18} />
+                  </span>
+                </Link>
+              </Magnetic>
+              <a
+                href={profile.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 border-2 border-primary text-base font-medium rounded-full shadow-md text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 font-semibold hover:border-primary hover:text-primary dark:hover:border-secondary dark:hover:text-secondary transition-colors"
               >
-                Resume <Download className="ml-2 w-5 h-5"/>
-              </motion.a>
-
-              {/* Social Links with enhanced styling */}
-              <div className="flex gap-3 mt-4 md:mt-0">
-                <motion.a
-                  whileHover={{ scale: 1.15, y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  href="https://github.com/Dineshbabu290904"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/30"
-                  aria-label="GitHub Profile"
-                >
-                  <Github className="w-6 h-6" />
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.15, y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  href="https://www.linkedin.com/in/dinesh-babu-surapaneni/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/30"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-6 h-6" />
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.15, y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  href="mailto:dineshbabus309@gmail.com"
-                  className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/30"
-                  aria-label="Send an email"
-                >
-                  <Mail className="w-6 h-6" />
-                </motion.a>
+                Resume <Download size={18} />
+              </a>
+              <div className="flex gap-2">
+                {[
+                  { href: profile.github, label: 'GitHub profile', icon: <Github size={20} /> },
+                  { href: profile.linkedin, label: 'LinkedIn profile', icon: <Linkedin size={20} /> },
+                  { href: `mailto:${profile.email}`, label: 'Send an email', icon: <Mail size={20} /> },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="grid place-items-center w-11 h-11 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-200 hover:text-primary hover:border-primary/40 dark:hover:text-secondary transition-[color,border-color,transform] duration-300 hover:-translate-y-0.5"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
               </div>
             </motion.div>
-            
-            {/* Quick facts */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-              className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3 text-sm text-gray-600 dark:text-gray-300"
-            >
+
+            <motion.ul {...enter(0.75)} className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 dark:text-gray-300">
               {[
-                { icon: <Briefcase className="w-4 h-4" />, text: 'DAZN India' },
-                { icon: <MapPin className="w-4 h-4" />, text: 'Hyderabad, India' },
-                { icon: <Code className="w-4 h-4" />, text: 'Full-stack · ML' },
+                { icon: <Briefcase size={16} />, text: profile.company },
+                { icon: <MapPin size={16} />, text: profile.location },
+                { icon: <Code size={16} />, text: 'Full-stack · ML' },
               ].map((fact) => (
-                <span key={fact.text} className="inline-flex items-center gap-2">
+                <li key={fact.text} className="inline-flex items-center gap-2">
                   <span className="text-primary dark:text-primary-light">{fact.icon}</span>
                   {fact.text}
-                </span>
+                </li>
               ))}
-            </motion.div>
-          </motion.div>
+            </motion.ul>
           </motion.div>
 
-          {/* Image Section - Enhanced with 3D effect and glow; drifts with scroll for depth */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.94 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={{ y: portraitY }}
-            className="md:w-1/2 flex justify-center md:justify-end"
-          >
-            <motion.div style={{ scale: portraitScale }}>
-            <div className="relative w-72 h-72 md:w-96 md:h-96">
-              {/* Decorative circles behind image */}
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1 }}
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 blur-2xl"
-              />
-              
-              {/* Multiple orbit rings */}
-              <div className="absolute inset-0 rounded-full">
-                <motion.div 
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-4 border-2 border-dashed border-primary/30 rounded-full"
-                />
-                <motion.div 
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-8 border-2 border-dashed border-secondary/30 rounded-full"
-                />
-              </div>
-              
-              {/* Floating elements */}
-              <motion.div 
-                animate={{ 
-                  x: [20, -20, 20], 
-                  y: [-20, 20, -20], 
-                  rotate: [0, 10, -10, 0]
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 right-10 w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-secondary/60 to-primary/60 rounded-2xl blur-md"
-              />
-              <motion.div 
-                animate={{ 
-                  x: [-20, 20, -20], 
-                  y: [20, -20, 20], 
-                  rotate: [0, -10, 10, 0]
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute bottom-10 left-0 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-primary/60 to-secondary/60 rounded-full blur-md"
-              />
-              
-              {/* Profile image with enhanced effects */}
-              <motion.div
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 50, delay: 0.5 }}
-                className="relative w-full h-full rounded-full flex items-center justify-center"
-              >
-                <div className="absolute inset-0 rounded-full shadow-2xl overflow-hidden border-8 border-white dark:border-gray-800">
-                  <motion.img
-                    animate={{
-                      scale: [1, 1.03, 1],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    src={`${import.meta.env.BASE_URL}asserts/profile.jpg`}
-                    alt="Dinesh Babu Surapaneni Profile"
-                    className="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-500"
-                  />
-                  {/* Image overlay glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-40" />
-                </div>
-                
-                {/* Animated rings */}
-                <motion.div 
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    opacity: [0.7, 0.9, 0.7]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 rounded-full border-4 border-primary/40"
-                />
-                <motion.div 
-                  animate={{ 
-                    scale: [1.05, 1.1, 1.05],
-                    opacity: [0.5, 0.7, 0.5]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="absolute inset-0 rounded-full border-4 border-secondary/30"
-                />
-              </motion.div>
-            </div>
-            </motion.div>
+          <motion.div style={reduced ? undefined : { y: portraitY }} className="flex justify-center lg:justify-end">
+            <BroadcastPortrait visible={isVisible} />
           </motion.div>
         </div>
       </div>
-      {/* Enhanced animations and style definitions */}
-      <style>{`
-        @keyframes gradient-shift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 15s ease infinite;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes pulse-glow {
-          0%, 100% { 
-            opacity: 0.7;
-            box-shadow: 0 0 20px 10px rgba(var(--color-primary-rgb), 0.3);
-          }
-          50% { 
-            opacity: 0.9;
-            box-shadow: 0 0 30px 15px rgba(var(--color-primary-rgb), 0.5);
-          }
-        }
-        
-        .animate-pulse-glow {
-          animation: pulse-glow 4s infinite ease-in-out;
-        }
-      `}</style>
     </section>
   );
 }

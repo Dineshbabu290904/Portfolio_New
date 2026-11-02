@@ -46,6 +46,22 @@ export default function EnhancedNavigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false);
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen]);
+
+  // Project pages live under /projects, so keep that tab lit there too.
+  const isActive = (route: string) =>
+    route === '/projects' ? location.pathname === route || location.pathname.startsWith('/projects/') : location.pathname === route;
+
   const handleNavigate = (route: string) => {
     navigate(route);
     setIsOpen(false);
@@ -65,7 +81,7 @@ export default function EnhancedNavigation() {
 
   return (
     <>
-      <div className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'py-2 max-lg:bg-gray-50/95 max-lg:dark:bg-gray-900/95' : 'py-4'}`}>
+      <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'py-2 max-lg:bg-gray-50/95 max-lg:dark:bg-gray-900/95' : 'py-4'}`}>
         {/* Desktop Navigation - UPDATED LAYOUT */}
         <div className={`hidden lg:block max-w-7xl mx-auto transition-all duration-300 ${scrolled
             ? 'bg-white/95 dark:bg-gray-900/95 shadow-lg rounded-full px-6'
@@ -80,13 +96,14 @@ export default function EnhancedNavigation() {
             </div>
 
             {/* Navigation Items - USING FLEX LAYOUT INSTEAD OF ABSOLUTE POSITIONING */}
-            <div className="flex-grow flex items-center justify-center mx-4">
+            <nav aria-label="Main" className="flex-grow flex items-center justify-center mx-4">
               <div className={`flex items-center space-x-1 bg-white/60 dark:bg-gray-800/60 rounded-full transition-all duration-300 ${scrolled ? 'px-2 py-1' : 'px-3 py-2'}`}>
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.route}
-                    className={`relative flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-full transition-all duration-300 ${location.pathname === item.route
+                    aria-current={isActive(item.route) ? 'page' : undefined}
+                    className={`relative flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive(item.route)
                         ? 'bg-primary text-white dark:text-gray-900 shadow-sm'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-700/50'
                       }`}
@@ -95,7 +112,7 @@ export default function EnhancedNavigation() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </nav>
 
             {/* Right side controls */}
             <div className="flex-shrink-0 flex items-center space-x-2">
@@ -113,13 +130,13 @@ export default function EnhancedNavigation() {
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-              <button
-                onClick={() => handleNavigate('/contact')}
+              <Link
+                to="/contact"
                 className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark text-white px-4 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 <span>Get in Touch</span>
                 <ArrowRight size={16} />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -148,27 +165,27 @@ export default function EnhancedNavigation() {
         </div>
 
         {/* Mobile Bottom Navigation Bar (first 5 items) */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 shadow-[0_-2px_10px_-3px_rgba(0,0,0,0.1)] border-t border-gray-200/80 dark:border-gray-800/80 py-2 px-4 sm:px-6 lg:hidden">
+        <nav aria-label="Sections" className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 shadow-[0_-2px_10px_-3px_rgba(0,0,0,0.1)] border-t border-gray-200/80 dark:border-gray-800/80 py-2 px-4 sm:px-6 lg:hidden">
           <div className="flex justify-around items-center max-w-md mx-auto">
             {navItems.slice(0, 6).map((item) => ( // Display first 5 items or adjust as needed
-              <Link key={item.name} to={item.route} className="flex flex-col items-center justify-center w-1/5 p-1 group" aria-label={item.name} onClick={() => setIsOpen(false)}>
-                <div className={`p-2 rounded-full transition-all duration-200 group-hover:scale-110 ${location.pathname === item.route ? 'bg-primary text-white dark:text-gray-900 shadow-sm' : 'text-gray-500 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-800'}`}>
+              <Link key={item.name} to={item.route} className="flex flex-col items-center justify-center w-1/5 p-1 group" aria-current={isActive(item.route) ? 'page' : undefined} onClick={() => setIsOpen(false)}>
+                <div className={`p-2 rounded-full transition-all duration-200 group-hover:scale-110 ${isActive(item.route) ? 'bg-primary text-white dark:text-gray-900 shadow-sm' : 'text-gray-500 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-800'}`}>
                   {React.cloneElement(item.icon, { size: 22 })}
                 </div>
-                <span className={`text-xs mt-1 transition-colors duration-200 ${location.pathname === item.route ? 'font-semibold text-primary dark:text-secondary' : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'}`}>
+                <span className={`text-xs mt-1 transition-colors duration-200 ${isActive(item.route) ? 'font-semibold text-primary dark:text-secondary' : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'}`}>
                   {item.name}
                 </span>
               </Link>
             ))}
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} aria-hidden="true" />
 
       {/* Mobile Slide-in Menu */}
-      <div className={`fixed top-0 right-0 h-full w-[85%] max-w-xs sm:max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl z-50 shadow-2xl lg:hidden transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+      <div className={`fixed top-0 right-0 h-full w-[85%] max-w-xs sm:max-w-sm bg-white dark:bg-gray-900 z-50 shadow-2xl lg:hidden transform transition-[transform,visibility] duration-300 ease-in-out ${isOpen ? 'translate-x-0 visible' : 'translate-x-full invisible'}`} role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
         <div className="flex flex-col h-full">
           <div className="p-5 sm:p-6 border-b border-gray-200/80 dark:border-gray-800/80">
             <div className="flex justify-between items-center">
@@ -185,7 +202,7 @@ export default function EnhancedNavigation() {
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Navigation</h3>
                 {navItems.map((item) => (
-                  <Link key={item.name} to={item.route} onClick={() => setIsOpen(false)} className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200 ${location.pathname === item.route ? 'bg-primary/10 text-primary dark:bg-primary/15 dark:text-primary-light font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-800/70 hover:pl-4'}`}>
+                  <Link key={item.name} to={item.route} onClick={() => setIsOpen(false)} aria-current={isActive(item.route) ? 'page' : undefined} className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200 ${isActive(item.route) ? 'bg-primary/10 text-primary dark:bg-primary/15 dark:text-primary-light font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/70 dark:hover:bg-gray-800/70 hover:pl-4'}`}>
                     <div className="flex items-center gap-3">
                       {React.cloneElement(item.icon, { size: 18 })}
                       <div>
@@ -193,7 +210,7 @@ export default function EnhancedNavigation() {
                         <div className="text-xs opacity-80">{item.description}</div>
                       </div>
                     </div>
-                    <ChevronRight size={18} className={`transition-transform ${location.pathname === item.route ? 'translate-x-0.5' : ''}`} />
+                    <ChevronRight size={18} className={`transition-transform ${isActive(item.route) ? 'translate-x-0.5' : ''}`} />
                   </Link>
                 ))}
               </div>
@@ -201,7 +218,7 @@ export default function EnhancedNavigation() {
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quick Actions</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {quickActions.map((action, index) => (
-                    <button key={index} onClick={action.action} className="flex items-center gap-2 p-3 bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 rounded-lg transition-colors text-gray-700 dark:text-gray-300 backdrop-blur-sm text-sm font-medium">
+                    <button key={index} onClick={action.action} className="flex items-center gap-2 p-3 bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 rounded-lg transition-colors text-gray-700 dark:text-gray-300 text-sm font-medium">
                       {action.icon}
                       <span>{action.name}</span>
                     </button>
@@ -212,7 +229,7 @@ export default function EnhancedNavigation() {
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Connect</h3>
                 <div className="flex gap-2">
                   {socialLinks.map((social, index) => (
-                    <a key={index} href={social.url} className="flex-1 p-3 bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 rounded-lg transition-colors text-gray-700 dark:text-gray-300 backdrop-blur-sm flex justify-center items-center" target="_blank" rel="noopener noreferrer" aria-label={social.name}>
+                    <a key={index} href={social.url} className="flex-1 p-3 bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 rounded-lg transition-colors text-gray-700 dark:text-gray-300 flex justify-center items-center" target="_blank" rel="noopener noreferrer" aria-label={social.name}>
                       {social.icon}
                     </a>
                   ))}
@@ -229,7 +246,6 @@ export default function EnhancedNavigation() {
         </div>
       </div>
 
-      <div className="lg:hidden h-20"></div> {/* Spacer for mobile bottom nav */}
     </>
   );
 }

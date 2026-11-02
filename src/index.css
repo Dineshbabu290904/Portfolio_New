@@ -189,3 +189,67 @@ code, kbd, samp, pre {
 .terminal-screen::-webkit-scrollbar { width: 6px; }
 .terminal-screen::-webkit-scrollbar-thumb { background: rgb(15 23 42 / 0.15); border-radius: 9999px; }
 .dark .terminal-screen::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); }
+
+/* Project cover motion graphics. Transform/opacity only; they run only while the cover is
+   on screen ([data-live]) and never under reduced motion. */
+/* Only animated parts pivot on their own box; static transform attributes keep SVG's default origin. */
+.project-cover .pc-pulse, .project-cover .pc-lock, .project-cover .pc-bar { transform-box: fill-box; }
+.project-cover .pc-float,
+.project-cover .pc-pulse,
+.project-cover .pc-scan,
+.project-cover .pc-lock,
+.project-cover .pc-bar { animation-play-state: paused; }
+.project-cover[data-live] .pc-float,
+.project-cover[data-live] .pc-pulse,
+.project-cover[data-live] .pc-scan,
+.project-cover[data-live] .pc-lock,
+.project-cover[data-live] .pc-bar { animation-play-state: running; }
+.pc-float { animation: pc-float 4.8s ease-in-out infinite; }
+.pc-pulse { transform-origin: center; animation: pc-pulse 2.4s ease-out infinite; }
+.pc-scan { transform-box: view-box; animation: pc-scan 3.2s cubic-bezier(.45,0,.55,1) infinite; }
+.pc-lock { transform-origin: center; animation: pc-lock 3.2s ease-out infinite; }
+.pc-bar { transform-origin: bottom; animation: pc-bar 2.8s ease-in-out infinite alternate; }
+@keyframes pc-float { 50% { transform: translateY(-8px); } }
+@keyframes pc-pulse { 0% { transform: scale(.85); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes pc-scan { 0% { transform: translateY(-10px); } 100% { transform: translateY(280px); } }
+@keyframes pc-lock { 0%, 30% { opacity: 0; transform: scale(1.25); } 45%, 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+@keyframes pc-bar { 0% { transform: scaleY(.55); } 100% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .project-cover * { animation: none !important; }
+  .project-cover .pc-lock { opacity: 1; }
+}
+
+/* Page transitions (View Transitions API, triggered by <Link viewTransition>).
+   The page cross-fades with a small lift while a project's cover morphs between the card and
+   its case study. Browsers without support simply navigate instantly. */
+::view-transition-old(root) { animation: vt-out 0.28s cubic-bezier(0.4, 0, 1, 1) both; }
+::view-transition-new(root) { animation: vt-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both; }
+::view-transition-group(*) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(20px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Hero "live broadcast" portrait. Transform/opacity only. */
+.hero-signal { animation: hero-signal 3.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; }
+@keyframes hero-signal { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.55); opacity: 0; } }
+.hero-orbit {
+  background: conic-gradient(from 0deg, transparent 0 62%, rgb(var(--c-secondary) / 0.9) 80%, rgb(var(--c-primary)) 92%, transparent 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 2px));
+  animation: hero-orbit 7s linear infinite;
+  will-change: transform;
+}
+@keyframes hero-orbit { to { transform: rotate(1turn); } }
+.hero-float { animation: hero-float 5.5s ease-in-out infinite; }
+.hero-float-alt { animation-duration: 6.5s; animation-delay: -2s; }
+@keyframes hero-float { 50% { transform: translateY(-8px); } }
+.hero-live-dot { animation: hero-blink 1.4s ease-in-out infinite; }
+@keyframes hero-blink { 50% { opacity: 0.25; } }
+.hero-eq { transform-origin: bottom; animation: hero-eq 0.9s ease-in-out infinite alternate; }
+@keyframes hero-eq { 0% { transform: scaleY(0.25); } 100% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-signal, .hero-orbit, .hero-float, .hero-live-dot, .hero-eq { animation: none !important; }
+  .hero-signal { opacity: 0; }
+}

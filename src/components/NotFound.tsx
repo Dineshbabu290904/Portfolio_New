@@ -10,12 +10,12 @@ export default function NotFound() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-lg w-full text-center bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 md:p-10"
+        className="max-w-lg w-full text-center bg-white/90 dark:bg-gray-800/80 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 md:p-10"
       >
         <p className="font-mono text-sm text-gray-500 dark:text-gray-400 mb-2">
           $ cd {pathname}
         </p>
-        <p className="font-mono text-sm text-red-500 dark:text-red-400 mb-6">
+        <p className="font-mono text-sm text-red-600 dark:text-red-400 mb-6">
           bash: no such file or directory
         </p>
         <h1 className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">

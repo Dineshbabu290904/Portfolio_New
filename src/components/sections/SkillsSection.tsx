@@ -53,7 +53,7 @@ export default function SkillsSection() {
             <RevealItem key={group.title} className="border-t border-gray-300/70 dark:border-gray-700 pt-5">
               <div className="flex items-baseline justify-between mb-4">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">{group.title}</h3>
-                <span className="font-mono text-xs text-gray-400 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-mono text-xs text-gray-500 dark:text-gray-400 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
               </div>
               <ul className="space-y-2">
                 {group.skills.map((skill) => (
@@ -67,6 +67,7 @@ export default function SkillsSection() {
                     </span>
                     {skill.level && (
                       <span
+                        role="img"
                         title={`${skill.level} proficiency`}
                         aria-label={`${skill.level} proficiency`}
                         className={`w-2 h-2 rounded-full shrink-0 ${

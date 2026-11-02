@@ -340,13 +340,14 @@ export default function TerminalPage() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-28 lg:pb-10 bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200 overflow-hidden"
+      className="relative min-h-[calc(100svh-4.5rem)] lg:min-h-[100svh] flex items-start sm:items-center justify-center px-3 sm:px-4 pt-24 pb-4 sm:pb-10 bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200 overflow-hidden"
       onKeyDown={skipBoot}
       onClick={() => {
         skipBoot();
         inputRef.current?.focus();
       }}
     >
+      <h1 className="sr-only">Interactive terminal</h1>
       {/* Stage lighting */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/4 top-1/4 w-[40vw] h-[40vw] opacity-20 dark:opacity-40" style={{ background: 'radial-gradient(circle closest-side, rgb(var(--c-primary)), transparent)' }} />
@@ -354,8 +355,8 @@ export default function TerminalPage() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.97, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="relative w-full max-w-4xl rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/80 shadow-[0_40px_120px_-30px_rgba(15,23,42,0.25)] dark:shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] overflow-hidden"
       >
@@ -382,7 +383,7 @@ export default function TerminalPage() {
         {/* Screen */}
         <div
           ref={scrollRef}
-          className="terminal-screen relative h-[min(68vh,560px)] overflow-y-auto px-5 py-4 font-mono text-[0.82rem] leading-relaxed"
+          className="terminal-screen relative h-[calc(100svh-17rem)] min-h-[16rem] sm:h-[min(62vh,680px)] lg:h-[min(68vh,560px)] overflow-y-auto px-4 sm:px-5 py-4 font-mono text-[0.82rem] leading-relaxed"
           aria-live="polite"
         >
           <div className="space-y-0.5 text-gray-500 dark:text-gray-400">
@@ -443,7 +444,7 @@ export default function TerminalPage() {
                   aria-label="Terminal command"
                   className="w-full bg-transparent text-gray-900 dark:text-white caret-primary dark:caret-secondary focus:outline-none text-base sm:[font-size:inherit]"
                 />
-                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-400 dark:text-gray-600 text-base sm:[font-size:inherit]">type a command, Tab to complete</span>}
+                {!input && <span aria-hidden="true" className="pointer-events-none absolute left-0 top-0 text-gray-400 dark:text-gray-600 text-base sm:[font-size:inherit]">type a command<span className="hidden sm:inline">, Tab to complete</span></span>}
               </span>
             </label>
           )}
