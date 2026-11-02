@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
@@ -22,11 +22,11 @@ const heading = {
   intro: 'A mix of full-stack products and machine learning work.',
 };
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project, index, coverClass = 'aspect-[16/9]' }: { project: Project; index: number; coverClass?: string }) {
   return (
     <>
       <Link to={`/projects/${project.id}`} viewTransition data-cursor="View" className="block relative" aria-label={`${project.title} case study`}>
-        <ProjectCover id={project.id} label={`Illustration of ${project.title}`} className="w-full aspect-[16/9] transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
+        <ProjectCover id={project.id} label={`Illustration of ${project.title}`} className={`w-full ${coverClass} transition-transform duration-700 ease-out group-hover:scale-[1.03]`} />
         <span className="absolute top-3 left-3 font-mono text-xs tabular-nums px-2 py-1 rounded-md bg-black/65 text-white">
           {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
         </span>
@@ -96,7 +96,7 @@ function ProjectsGrid() {
 }
 
 // Desktop: the section pins and vertical scrolling slides the cards sideways like a film strip.
-function ProjectsFilmStrip() {
+function ProjectsFilmStrip({ onOverflow }: { onOverflow: () => void }) {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [distance, setDistance] = useState(0);
@@ -104,7 +104,12 @@ function ProjectsFilmStrip() {
   useLayoutEffect(() => {
     const measure = () => {
       const track = trackRef.current;
-      if (track) setDistance(Math.max(0, track.scrollWidth - window.innerWidth));
+      if (!track) return;
+      setDistance(Math.max(0, track.scrollWidth - window.innerWidth));
+      // The pinned frame is one screen tall: if the cards would be cut off, use the grid instead.
+      // The frame centres its content, so overflow spills past its bottom edge (and top).
+      const frame = track.parentElement?.getBoundingClientRect();
+      if (frame && track.getBoundingClientRect().bottom > frame.bottom + 1) onOverflow();
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -114,7 +119,7 @@ function ProjectsFilmStrip() {
       observer.disconnect();
       window.removeEventListener('resize', measure);
     };
-  }, []);
+  }, [onOverflow]);
 
   // Mapped directly from scroll so the strip moves 1:1 with the wheel.
   const { scrollYProgress: progress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
@@ -156,7 +161,7 @@ function ProjectsFilmStrip() {
               whileHover={{ y: -6 }}
               className={`${cardClass} w-[min(30rem,40vw)] shrink-0`}
             >
-              <ProjectCard project={project} index={i} />
+              <ProjectCard project={project} index={i} coverClass="h-[clamp(7rem,calc(100vh-37rem),15rem)]" />
             </motion.article>
           ))}
         </motion.div>
@@ -168,5 +173,13 @@ function ProjectsFilmStrip() {
 export default function ProjectsSection() {
   const reduced = useReducedMotion();
   const desktop = useMediaQuery(CINEMATIC_QUERY);
-  return desktop && !reduced ? <ProjectsFilmStrip /> : <ProjectsGrid />;
+  // Set when the pinned strip measures that its cards would not fit the screen; reset on resize.
+  const [tooShort, setTooShort] = useState(false);
+  const onOverflow = useCallback(() => setTooShort(true), []);
+  useEffect(() => {
+    const reset = () => setTooShort(false);
+    window.addEventListener('resize', reset);
+    return () => window.removeEventListener('resize', reset);
+  }, []);
+  return desktop && !reduced && !tooShort ? <ProjectsFilmStrip onOverflow={onOverflow} /> : <ProjectsGrid />;
 }
